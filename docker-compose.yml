@@ -1,0 +1,4 @@
+version: "3.5"
+services:
+  quote-server:
+    image: "quote_server"

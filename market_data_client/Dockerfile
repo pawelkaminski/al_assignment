@@ -39,5 +39,4 @@ COPY scripts/entrypoint.sh scripts/command.sh /
 #### Execution command
 EXPOSE 80
 ENTRYPOINT ["bash", "/entrypoint.sh"]
-CMD ["sleep", "600000"]
-#CMD ["bash", "/command.sh"]
+CMD ["bash", "/command.sh"]
