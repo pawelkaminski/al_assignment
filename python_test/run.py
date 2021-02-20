@@ -1,6 +1,9 @@
+"""
+Tests if websocket connection ~ collects data
+"""
+import asyncio
 import json
 
-import asyncio
 import websockets
 
 
@@ -25,9 +28,10 @@ async def hello():
         x = 1
 
         with open("res.json", "w") as file:
-            while x < 2000:
+            while x < 2000000:
                 x += 1
                 greeting = await websocket.recv()
+                print(x)
                 print(greeting)
                 file.write(greeting)
 
