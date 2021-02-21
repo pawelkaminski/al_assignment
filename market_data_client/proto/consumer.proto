@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "al.assignment.runtime.grpc";
+option java_outer_classname = "ConsumerInterface";
+
+service Consumer {
+  rpc onTrade () returns (Status) {}
+  rpc onBook () returns (Status) {}
+}
+
+message Status {
+    boolean status = 1;
+}

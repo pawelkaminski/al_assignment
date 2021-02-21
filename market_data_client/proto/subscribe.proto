@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "al.assignment.runtime.grpc";
+option java_outer_classname = "QuotaServiceInterface";
+
+service Subscriber {
+  rpc subscribe (Subscriptions) returns (Status) {}
+  rpc isHealthy () returns (Status) {}
+}
+
+message Subscriptions {
+    repeated string subscription = 1;
+}
+
+message Status {
+    boolean status = 1;
+}
