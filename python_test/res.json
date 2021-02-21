@@ -1,4 +1,3 @@
-{"type":"error","message":"Failed to subscribe","reason":"USD-ETH is not a valid product"}
 {"type":"subscriptions","channels":[{"name":"full","product_ids":["ETH-USD"]}]}
 {"type":"done","side":"sell","product_id":"ETH-USD","time":"2021-02-08T00:59:24.589415Z","sequence":13710302775,"order_id":"0d984a0e-8d08-42d0-82a1-9d3e18273fe0","reason":"canceled","price":"1597.02","remaining_size":"17.745"}
 {"type":"received","side":"buy","product_id":"ETH-USD","time":"2021-02-08T00:59:24.591486Z","sequence":13710302776,"order_id":"19abf81a-3793-4bf0-a8f8-b528ba31ff16","order_type":"limit","size":"1.545","price":"1595.25","client_oid":"e2d226de-69a8-11eb-998e-0ecb6e855915"}
