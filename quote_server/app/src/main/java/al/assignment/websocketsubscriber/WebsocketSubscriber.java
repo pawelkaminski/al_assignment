@@ -5,26 +5,27 @@ import java.io.StringWriter;
 import java.net.URI;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
-import java.util.concurrent.BlockingQueue;
 
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.drafts.Draft;
 import org.java_websocket.handshake.ServerHandshake;
 import org.json.simple.JSONObject;
 
+import al.assignment.utils.WebSocketQueue;
+
 
 public class WebsocketSubscriber extends WebSocketClient {
     static final String COINBASE_URL = "wss://ws-feed.pro.coinbase.com/";
     String symbol;
-    private final BlockingQueue<String> queue;
+    private final WebSocketQueue queue;
 
-    public WebsocketSubscriber(String symbol, BlockingQueue<String> queue, Draft draft) {
+    public WebsocketSubscriber(String symbol, WebSocketQueue queue, Draft draft) {
         super(URI.create(WebsocketSubscriber.COINBASE_URL), draft);
         this.symbol = symbol;
         this.queue = queue;
     }
 
-    public WebsocketSubscriber(String symbol, BlockingQueue<String> queue) {
+    public WebsocketSubscriber(String symbol, WebSocketQueue queue) {
         super(URI.create(WebsocketSubscriber.COINBASE_URL));
         this.symbol = symbol;
         this.queue = queue;

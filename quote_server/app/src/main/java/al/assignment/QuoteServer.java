@@ -1,18 +1,17 @@
 package al.assignment;
 
-import al.assignment.websocketsubscriber.*;
-import al.assignment.symbolprocessor.SybmbolProcessor;
 import org.java_websocket.client.WebSocketClient;
 
-import java.util.concurrent.ArrayBlockingQueue;
+import al.assignment.websocketsubscriber.WebsocketSubscriber;
+import al.assignment.symbolprocessor.SymbolProcessor;
+import al.assignment.utils.WebSocketQueue;
 
 public class QuoteServer {
 
     public static void main(String[] args) {
         // mock run
-
-        ArrayBlockingQueue<String> queue = new ArrayBlockingQueue<String>(100000);
-        SybmbolProcessor processor = new SybmbolProcessor("ETH-USD", queue);
+        WebSocketQueue queue = new WebSocketQueue();
+        SymbolProcessor processor = new SymbolProcessor("ETH-USD", queue);
         new Thread(processor).start();
         WebSocketClient client = new WebsocketSubscriber("ETH-USD", queue);
         client.connect();
