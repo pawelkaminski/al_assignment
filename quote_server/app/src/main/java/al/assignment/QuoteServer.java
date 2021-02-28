@@ -86,6 +86,5 @@ public class QuoteServer {
             System.out.println("GOOD");
         }
 
-
     }
 }
