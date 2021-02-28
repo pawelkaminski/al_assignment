@@ -26,7 +26,7 @@ RUN mkdir -p /usr/share/maven /usr/share/maven/ref \
 
 ### Copy basic application
 COPY app app
-COPY proto proto
+COPY app/src/main/proto proto
 #
 #### Install application
 RUN bash app/scripts/install.sh
