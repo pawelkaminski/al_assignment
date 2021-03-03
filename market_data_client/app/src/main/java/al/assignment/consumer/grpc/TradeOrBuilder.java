@@ -36,4 +36,16 @@ public interface TradeOrBuilder extends
    */
   com.google.protobuf.ByteString
       getQuantityBytes();
+
+  /**
+   * <code>string symbol = 4;</code>
+   * @return The symbol.
+   */
+  java.lang.String getSymbol();
+  /**
+   * <code>string symbol = 4;</code>
+   * @return The bytes for symbol.
+   */
+  com.google.protobuf.ByteString
+      getSymbolBytes();
 }

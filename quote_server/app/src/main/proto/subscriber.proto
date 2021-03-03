@@ -10,7 +10,9 @@ service Subscriber {
 }
 
 message Subscriptions {
-    repeated string subscription = 1;
+    string host = 1;
+    string port = 2;
+    repeated string subscription = 3;
 }
 
 message ProducerStatus {

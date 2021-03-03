@@ -14,26 +14,56 @@ public interface BookOrBuilder extends
   boolean getIsBuy();
 
   /**
-   * <code>string price = 2;</code>
+   * <code>bool isDelete = 2;</code>
+   * @return The isDelete.
+   */
+  boolean getIsDelete();
+
+  /**
+   * <code>string price = 3;</code>
    * @return The price.
    */
   String getPrice();
   /**
-   * <code>string price = 2;</code>
+   * <code>string price = 3;</code>
    * @return The bytes for price.
    */
   com.google.protobuf.ByteString
       getPriceBytes();
 
   /**
-   * <code>string quantity = 3;</code>
+   * <code>string quantity = 4;</code>
    * @return The quantity.
    */
   String getQuantity();
   /**
-   * <code>string quantity = 3;</code>
+   * <code>string quantity = 4;</code>
    * @return The bytes for quantity.
    */
   com.google.protobuf.ByteString
       getQuantityBytes();
+
+  /**
+   * <code>string orderId = 5;</code>
+   * @return The orderId.
+   */
+  String getOrderId();
+  /**
+   * <code>string orderId = 5;</code>
+   * @return The bytes for orderId.
+   */
+  com.google.protobuf.ByteString
+      getOrderIdBytes();
+
+  /**
+   * <code>string symbol = 6;</code>
+   * @return The symbol.
+   */
+  String getSymbol();
+  /**
+   * <code>string symbol = 6;</code>
+   * @return The bytes for symbol.
+   */
+  com.google.protobuf.ByteString
+      getSymbolBytes();
 }

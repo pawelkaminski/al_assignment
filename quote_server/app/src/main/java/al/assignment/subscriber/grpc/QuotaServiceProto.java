@@ -33,13 +33,14 @@ public final class QuotaServiceProto {
       descriptor;
   static {
     String[] descriptorData = {
-      "\n\020subscriber.proto\"%\n\rSubscriptions\022\024\n\014s" +
-      "ubscription\030\001 \003(\t\" \n\016ProducerStatus\022\016\n\006s" +
-      "tatus\030\001 \001(\0102m\n\nSubscriber\022.\n\tsubscribe\022\016" +
-      ".Subscriptions\032\017.ProducerStatus\"\000\022/\n\tisH" +
-      "ealthy\022\017.ProducerStatus\032\017.ProducerStatus" +
-      "\"\000B4\n\035al.assignment.subscriber.grpcB\021Quo" +
-      "taServiceProtoP\001b\006proto3"
+      "\n\020subscriber.proto\"A\n\rSubscriptions\022\014\n\004h" +
+      "ost\030\001 \001(\t\022\014\n\004port\030\002 \001(\t\022\024\n\014subscription\030" +
+      "\003 \003(\t\" \n\016ProducerStatus\022\016\n\006status\030\001 \001(\0102" +
+      "m\n\nSubscriber\022.\n\tsubscribe\022\016.Subscriptio" +
+      "ns\032\017.ProducerStatus\"\000\022/\n\tisHealthy\022\017.Pro" +
+      "ducerStatus\032\017.ProducerStatus\"\000B4\n\035al.ass" +
+      "ignment.subscriber.grpcB\021QuotaServicePro" +
+      "toP\001b\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -50,7 +51,7 @@ public final class QuotaServiceProto {
     internal_static_Subscriptions_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_Subscriptions_descriptor,
-        new String[] { "Subscription", });
+        new String[] { "Host", "Port", "Subscription", });
     internal_static_ProducerStatus_descriptor =
       getDescriptor().getMessageTypes().get(1);
     internal_static_ProducerStatus_fieldAccessorTable = new

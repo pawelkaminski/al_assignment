@@ -8,24 +8,48 @@ public interface SubscriptionsOrBuilder extends
     com.google.protobuf.MessageOrBuilder {
 
   /**
-   * <code>repeated string subscription = 1;</code>
+   * <code>string host = 1;</code>
+   * @return The host.
+   */
+  java.lang.String getHost();
+  /**
+   * <code>string host = 1;</code>
+   * @return The bytes for host.
+   */
+  com.google.protobuf.ByteString
+      getHostBytes();
+
+  /**
+   * <code>string port = 2;</code>
+   * @return The port.
+   */
+  java.lang.String getPort();
+  /**
+   * <code>string port = 2;</code>
+   * @return The bytes for port.
+   */
+  com.google.protobuf.ByteString
+      getPortBytes();
+
+  /**
+   * <code>repeated string subscription = 3;</code>
    * @return A list containing the subscription.
    */
   java.util.List<java.lang.String>
       getSubscriptionList();
   /**
-   * <code>repeated string subscription = 1;</code>
+   * <code>repeated string subscription = 3;</code>
    * @return The count of subscription.
    */
   int getSubscriptionCount();
   /**
-   * <code>repeated string subscription = 1;</code>
+   * <code>repeated string subscription = 3;</code>
    * @param index The index of the element to return.
    * @return The subscription at the given index.
    */
   java.lang.String getSubscription(int index);
   /**
-   * <code>repeated string subscription = 1;</code>
+   * <code>repeated string subscription = 3;</code>
    * @param index The index of the value to return.
    * @return The bytes of the subscription at the given index.
    */

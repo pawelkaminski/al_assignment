@@ -16,6 +16,8 @@ private static final long serialVersionUID = 0L;
     super(builder);
   }
   private Subscriptions() {
+    host_ = "";
+    port_ = "";
     subscription_ = com.google.protobuf.LazyStringArrayList.EMPTY;
   }
 
@@ -51,6 +53,18 @@ private static final long serialVersionUID = 0L;
             done = true;
             break;
           case 10: {
+            String s = input.readStringRequireUtf8();
+
+            host_ = s;
+            break;
+          }
+          case 18: {
+            String s = input.readStringRequireUtf8();
+
+            port_ = s;
+            break;
+          }
+          case 26: {
             String s = input.readStringRequireUtf8();
             if (!((mutable_bitField0_ & 0x00000001) != 0)) {
               subscription_ = new com.google.protobuf.LazyStringArrayList();
@@ -94,10 +108,86 @@ private static final long serialVersionUID = 0L;
             Subscriptions.class, Builder.class);
   }
 
-  public static final int SUBSCRIPTION_FIELD_NUMBER = 1;
+  public static final int HOST_FIELD_NUMBER = 1;
+  private volatile Object host_;
+  /**
+   * <code>string host = 1;</code>
+   * @return The host.
+   */
+  @Override
+  public String getHost() {
+    Object ref = host_;
+    if (ref instanceof String) {
+      return (String) ref;
+    } else {
+      com.google.protobuf.ByteString bs = 
+          (com.google.protobuf.ByteString) ref;
+      String s = bs.toStringUtf8();
+      host_ = s;
+      return s;
+    }
+  }
+  /**
+   * <code>string host = 1;</code>
+   * @return The bytes for host.
+   */
+  @Override
+  public com.google.protobuf.ByteString
+      getHostBytes() {
+    Object ref = host_;
+    if (ref instanceof String) {
+      com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString.copyFromUtf8(
+              (String) ref);
+      host_ = b;
+      return b;
+    } else {
+      return (com.google.protobuf.ByteString) ref;
+    }
+  }
+
+  public static final int PORT_FIELD_NUMBER = 2;
+  private volatile Object port_;
+  /**
+   * <code>string port = 2;</code>
+   * @return The port.
+   */
+  @Override
+  public String getPort() {
+    Object ref = port_;
+    if (ref instanceof String) {
+      return (String) ref;
+    } else {
+      com.google.protobuf.ByteString bs = 
+          (com.google.protobuf.ByteString) ref;
+      String s = bs.toStringUtf8();
+      port_ = s;
+      return s;
+    }
+  }
+  /**
+   * <code>string port = 2;</code>
+   * @return The bytes for port.
+   */
+  @Override
+  public com.google.protobuf.ByteString
+      getPortBytes() {
+    Object ref = port_;
+    if (ref instanceof String) {
+      com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString.copyFromUtf8(
+              (String) ref);
+      port_ = b;
+      return b;
+    } else {
+      return (com.google.protobuf.ByteString) ref;
+    }
+  }
+
+  public static final int SUBSCRIPTION_FIELD_NUMBER = 3;
   private com.google.protobuf.LazyStringList subscription_;
   /**
-   * <code>repeated string subscription = 1;</code>
+   * <code>repeated string subscription = 3;</code>
    * @return A list containing the subscription.
    */
   public com.google.protobuf.ProtocolStringList
@@ -105,14 +195,14 @@ private static final long serialVersionUID = 0L;
     return subscription_;
   }
   /**
-   * <code>repeated string subscription = 1;</code>
+   * <code>repeated string subscription = 3;</code>
    * @return The count of subscription.
    */
   public int getSubscriptionCount() {
     return subscription_.size();
   }
   /**
-   * <code>repeated string subscription = 1;</code>
+   * <code>repeated string subscription = 3;</code>
    * @param index The index of the element to return.
    * @return The subscription at the given index.
    */
@@ -120,7 +210,7 @@ private static final long serialVersionUID = 0L;
     return subscription_.get(index);
   }
   /**
-   * <code>repeated string subscription = 1;</code>
+   * <code>repeated string subscription = 3;</code>
    * @param index The index of the value to return.
    * @return The bytes of the subscription at the given index.
    */
@@ -143,8 +233,14 @@ private static final long serialVersionUID = 0L;
   @Override
   public void writeTo(com.google.protobuf.CodedOutputStream output)
                       throws java.io.IOException {
+    if (!getHostBytes().isEmpty()) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 1, host_);
+    }
+    if (!getPortBytes().isEmpty()) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 2, port_);
+    }
     for (int i = 0; i < subscription_.size(); i++) {
-      com.google.protobuf.GeneratedMessageV3.writeString(output, 1, subscription_.getRaw(i));
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 3, subscription_.getRaw(i));
     }
     unknownFields.writeTo(output);
   }
@@ -155,6 +251,12 @@ private static final long serialVersionUID = 0L;
     if (size != -1) return size;
 
     size = 0;
+    if (!getHostBytes().isEmpty()) {
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, host_);
+    }
+    if (!getPortBytes().isEmpty()) {
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, port_);
+    }
     {
       int dataSize = 0;
       for (int i = 0; i < subscription_.size(); i++) {
@@ -178,6 +280,10 @@ private static final long serialVersionUID = 0L;
     }
     Subscriptions other = (Subscriptions) obj;
 
+    if (!getHost()
+        .equals(other.getHost())) return false;
+    if (!getPort()
+        .equals(other.getPort())) return false;
     if (!getSubscriptionList()
         .equals(other.getSubscriptionList())) return false;
     if (!unknownFields.equals(other.unknownFields)) return false;
@@ -191,6 +297,10 @@ private static final long serialVersionUID = 0L;
     }
     int hash = 41;
     hash = (19 * hash) + getDescriptor().hashCode();
+    hash = (37 * hash) + HOST_FIELD_NUMBER;
+    hash = (53 * hash) + getHost().hashCode();
+    hash = (37 * hash) + PORT_FIELD_NUMBER;
+    hash = (53 * hash) + getPort().hashCode();
     if (getSubscriptionCount() > 0) {
       hash = (37 * hash) + SUBSCRIPTION_FIELD_NUMBER;
       hash = (53 * hash) + getSubscriptionList().hashCode();
@@ -328,6 +438,10 @@ private static final long serialVersionUID = 0L;
     @Override
     public Builder clear() {
       super.clear();
+      host_ = "";
+
+      port_ = "";
+
       subscription_ = com.google.protobuf.LazyStringArrayList.EMPTY;
       bitField0_ = (bitField0_ & ~0x00000001);
       return this;
@@ -357,6 +471,8 @@ private static final long serialVersionUID = 0L;
     public Subscriptions buildPartial() {
       Subscriptions result = new Subscriptions(this);
       int from_bitField0_ = bitField0_;
+      result.host_ = host_;
+      result.port_ = port_;
       if (((bitField0_ & 0x00000001) != 0)) {
         subscription_ = subscription_.getUnmodifiableView();
         bitField0_ = (bitField0_ & ~0x00000001);
@@ -410,6 +526,14 @@ private static final long serialVersionUID = 0L;
 
     public Builder mergeFrom(Subscriptions other) {
       if (other == Subscriptions.getDefaultInstance()) return this;
+      if (!other.getHost().isEmpty()) {
+        host_ = other.host_;
+        onChanged();
+      }
+      if (!other.getPort().isEmpty()) {
+        port_ = other.port_;
+        onChanged();
+      }
       if (!other.subscription_.isEmpty()) {
         if (subscription_.isEmpty()) {
           subscription_ = other.subscription_;
@@ -450,6 +574,158 @@ private static final long serialVersionUID = 0L;
     }
     private int bitField0_;
 
+    private Object host_ = "";
+    /**
+     * <code>string host = 1;</code>
+     * @return The host.
+     */
+    public String getHost() {
+      Object ref = host_;
+      if (!(ref instanceof String)) {
+        com.google.protobuf.ByteString bs =
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        host_ = s;
+        return s;
+      } else {
+        return (String) ref;
+      }
+    }
+    /**
+     * <code>string host = 1;</code>
+     * @return The bytes for host.
+     */
+    public com.google.protobuf.ByteString
+        getHostBytes() {
+      Object ref = host_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (String) ref);
+        host_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    /**
+     * <code>string host = 1;</code>
+     * @param value The host to set.
+     * @return This builder for chaining.
+     */
+    public Builder setHost(
+        String value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  
+      host_ = value;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>string host = 1;</code>
+     * @return This builder for chaining.
+     */
+    public Builder clearHost() {
+      
+      host_ = getDefaultInstance().getHost();
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>string host = 1;</code>
+     * @param value The bytes for host to set.
+     * @return This builder for chaining.
+     */
+    public Builder setHostBytes(
+        com.google.protobuf.ByteString value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+      
+      host_ = value;
+      onChanged();
+      return this;
+    }
+
+    private Object port_ = "";
+    /**
+     * <code>string port = 2;</code>
+     * @return The port.
+     */
+    public String getPort() {
+      Object ref = port_;
+      if (!(ref instanceof String)) {
+        com.google.protobuf.ByteString bs =
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        port_ = s;
+        return s;
+      } else {
+        return (String) ref;
+      }
+    }
+    /**
+     * <code>string port = 2;</code>
+     * @return The bytes for port.
+     */
+    public com.google.protobuf.ByteString
+        getPortBytes() {
+      Object ref = port_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (String) ref);
+        port_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    /**
+     * <code>string port = 2;</code>
+     * @param value The port to set.
+     * @return This builder for chaining.
+     */
+    public Builder setPort(
+        String value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  
+      port_ = value;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>string port = 2;</code>
+     * @return This builder for chaining.
+     */
+    public Builder clearPort() {
+      
+      port_ = getDefaultInstance().getPort();
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>string port = 2;</code>
+     * @param value The bytes for port to set.
+     * @return This builder for chaining.
+     */
+    public Builder setPortBytes(
+        com.google.protobuf.ByteString value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+      
+      port_ = value;
+      onChanged();
+      return this;
+    }
+
     private com.google.protobuf.LazyStringList subscription_ = com.google.protobuf.LazyStringArrayList.EMPTY;
     private void ensureSubscriptionIsMutable() {
       if (!((bitField0_ & 0x00000001) != 0)) {
@@ -458,7 +734,7 @@ private static final long serialVersionUID = 0L;
        }
     }
     /**
-     * <code>repeated string subscription = 1;</code>
+     * <code>repeated string subscription = 3;</code>
      * @return A list containing the subscription.
      */
     public com.google.protobuf.ProtocolStringList
@@ -466,14 +742,14 @@ private static final long serialVersionUID = 0L;
       return subscription_.getUnmodifiableView();
     }
     /**
-     * <code>repeated string subscription = 1;</code>
+     * <code>repeated string subscription = 3;</code>
      * @return The count of subscription.
      */
     public int getSubscriptionCount() {
       return subscription_.size();
     }
     /**
-     * <code>repeated string subscription = 1;</code>
+     * <code>repeated string subscription = 3;</code>
      * @param index The index of the element to return.
      * @return The subscription at the given index.
      */
@@ -481,7 +757,7 @@ private static final long serialVersionUID = 0L;
       return subscription_.get(index);
     }
     /**
-     * <code>repeated string subscription = 1;</code>
+     * <code>repeated string subscription = 3;</code>
      * @param index The index of the value to return.
      * @return The bytes of the subscription at the given index.
      */
@@ -490,7 +766,7 @@ private static final long serialVersionUID = 0L;
       return subscription_.getByteString(index);
     }
     /**
-     * <code>repeated string subscription = 1;</code>
+     * <code>repeated string subscription = 3;</code>
      * @param index The index to set the value at.
      * @param value The subscription to set.
      * @return This builder for chaining.
@@ -506,7 +782,7 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>repeated string subscription = 1;</code>
+     * <code>repeated string subscription = 3;</code>
      * @param value The subscription to add.
      * @return This builder for chaining.
      */
@@ -521,7 +797,7 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>repeated string subscription = 1;</code>
+     * <code>repeated string subscription = 3;</code>
      * @param values The subscription to add.
      * @return This builder for chaining.
      */
@@ -534,7 +810,7 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>repeated string subscription = 1;</code>
+     * <code>repeated string subscription = 3;</code>
      * @return This builder for chaining.
      */
     public Builder clearSubscription() {
@@ -544,7 +820,7 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>repeated string subscription = 1;</code>
+     * <code>repeated string subscription = 3;</code>
      * @param value The bytes of the subscription to add.
      * @return This builder for chaining.
      */

@@ -18,6 +18,8 @@ private static final long serialVersionUID = 0L;
   private Book() {
     price_ = "";
     quantity_ = "";
+    orderId_ = "";
+    symbol_ = "";
   }
 
   @Override
@@ -55,16 +57,33 @@ private static final long serialVersionUID = 0L;
             isBuy_ = input.readBool();
             break;
           }
-          case 18: {
-            String s = input.readStringRequireUtf8();
+          case 16: {
 
-            price_ = s;
+            isDelete_ = input.readBool();
             break;
           }
           case 26: {
             String s = input.readStringRequireUtf8();
 
+            price_ = s;
+            break;
+          }
+          case 34: {
+            String s = input.readStringRequireUtf8();
+
             quantity_ = s;
+            break;
+          }
+          case 42: {
+            String s = input.readStringRequireUtf8();
+
+            orderId_ = s;
+            break;
+          }
+          case 50: {
+            String s = input.readStringRequireUtf8();
+
+            symbol_ = s;
             break;
           }
           default: {
@@ -110,10 +129,21 @@ private static final long serialVersionUID = 0L;
     return isBuy_;
   }
 
-  public static final int PRICE_FIELD_NUMBER = 2;
+  public static final int ISDELETE_FIELD_NUMBER = 2;
+  private boolean isDelete_;
+  /**
+   * <code>bool isDelete = 2;</code>
+   * @return The isDelete.
+   */
+  @Override
+  public boolean getIsDelete() {
+    return isDelete_;
+  }
+
+  public static final int PRICE_FIELD_NUMBER = 3;
   private volatile Object price_;
   /**
-   * <code>string price = 2;</code>
+   * <code>string price = 3;</code>
    * @return The price.
    */
   @Override
@@ -130,7 +160,7 @@ private static final long serialVersionUID = 0L;
     }
   }
   /**
-   * <code>string price = 2;</code>
+   * <code>string price = 3;</code>
    * @return The bytes for price.
    */
   @Override
@@ -148,10 +178,10 @@ private static final long serialVersionUID = 0L;
     }
   }
 
-  public static final int QUANTITY_FIELD_NUMBER = 3;
+  public static final int QUANTITY_FIELD_NUMBER = 4;
   private volatile Object quantity_;
   /**
-   * <code>string quantity = 3;</code>
+   * <code>string quantity = 4;</code>
    * @return The quantity.
    */
   @Override
@@ -168,7 +198,7 @@ private static final long serialVersionUID = 0L;
     }
   }
   /**
-   * <code>string quantity = 3;</code>
+   * <code>string quantity = 4;</code>
    * @return The bytes for quantity.
    */
   @Override
@@ -180,6 +210,82 @@ private static final long serialVersionUID = 0L;
           com.google.protobuf.ByteString.copyFromUtf8(
               (String) ref);
       quantity_ = b;
+      return b;
+    } else {
+      return (com.google.protobuf.ByteString) ref;
+    }
+  }
+
+  public static final int ORDERID_FIELD_NUMBER = 5;
+  private volatile Object orderId_;
+  /**
+   * <code>string orderId = 5;</code>
+   * @return The orderId.
+   */
+  @Override
+  public String getOrderId() {
+    Object ref = orderId_;
+    if (ref instanceof String) {
+      return (String) ref;
+    } else {
+      com.google.protobuf.ByteString bs = 
+          (com.google.protobuf.ByteString) ref;
+      String s = bs.toStringUtf8();
+      orderId_ = s;
+      return s;
+    }
+  }
+  /**
+   * <code>string orderId = 5;</code>
+   * @return The bytes for orderId.
+   */
+  @Override
+  public com.google.protobuf.ByteString
+      getOrderIdBytes() {
+    Object ref = orderId_;
+    if (ref instanceof String) {
+      com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString.copyFromUtf8(
+              (String) ref);
+      orderId_ = b;
+      return b;
+    } else {
+      return (com.google.protobuf.ByteString) ref;
+    }
+  }
+
+  public static final int SYMBOL_FIELD_NUMBER = 6;
+  private volatile Object symbol_;
+  /**
+   * <code>string symbol = 6;</code>
+   * @return The symbol.
+   */
+  @Override
+  public String getSymbol() {
+    Object ref = symbol_;
+    if (ref instanceof String) {
+      return (String) ref;
+    } else {
+      com.google.protobuf.ByteString bs = 
+          (com.google.protobuf.ByteString) ref;
+      String s = bs.toStringUtf8();
+      symbol_ = s;
+      return s;
+    }
+  }
+  /**
+   * <code>string symbol = 6;</code>
+   * @return The bytes for symbol.
+   */
+  @Override
+  public com.google.protobuf.ByteString
+      getSymbolBytes() {
+    Object ref = symbol_;
+    if (ref instanceof String) {
+      com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString.copyFromUtf8(
+              (String) ref);
+      symbol_ = b;
       return b;
     } else {
       return (com.google.protobuf.ByteString) ref;
@@ -203,11 +309,20 @@ private static final long serialVersionUID = 0L;
     if (isBuy_ != false) {
       output.writeBool(1, isBuy_);
     }
+    if (isDelete_ != false) {
+      output.writeBool(2, isDelete_);
+    }
     if (!getPriceBytes().isEmpty()) {
-      com.google.protobuf.GeneratedMessageV3.writeString(output, 2, price_);
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 3, price_);
     }
     if (!getQuantityBytes().isEmpty()) {
-      com.google.protobuf.GeneratedMessageV3.writeString(output, 3, quantity_);
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 4, quantity_);
+    }
+    if (!getOrderIdBytes().isEmpty()) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 5, orderId_);
+    }
+    if (!getSymbolBytes().isEmpty()) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 6, symbol_);
     }
     unknownFields.writeTo(output);
   }
@@ -222,11 +337,21 @@ private static final long serialVersionUID = 0L;
       size += com.google.protobuf.CodedOutputStream
         .computeBoolSize(1, isBuy_);
     }
+    if (isDelete_ != false) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeBoolSize(2, isDelete_);
+    }
     if (!getPriceBytes().isEmpty()) {
-      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, price_);
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, price_);
     }
     if (!getQuantityBytes().isEmpty()) {
-      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, quantity_);
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(4, quantity_);
+    }
+    if (!getOrderIdBytes().isEmpty()) {
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(5, orderId_);
+    }
+    if (!getSymbolBytes().isEmpty()) {
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(6, symbol_);
     }
     size += unknownFields.getSerializedSize();
     memoizedSize = size;
@@ -245,10 +370,16 @@ private static final long serialVersionUID = 0L;
 
     if (getIsBuy()
         != other.getIsBuy()) return false;
+    if (getIsDelete()
+        != other.getIsDelete()) return false;
     if (!getPrice()
         .equals(other.getPrice())) return false;
     if (!getQuantity()
         .equals(other.getQuantity())) return false;
+    if (!getOrderId()
+        .equals(other.getOrderId())) return false;
+    if (!getSymbol()
+        .equals(other.getSymbol())) return false;
     if (!unknownFields.equals(other.unknownFields)) return false;
     return true;
   }
@@ -263,10 +394,17 @@ private static final long serialVersionUID = 0L;
     hash = (37 * hash) + ISBUY_FIELD_NUMBER;
     hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
         getIsBuy());
+    hash = (37 * hash) + ISDELETE_FIELD_NUMBER;
+    hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
+        getIsDelete());
     hash = (37 * hash) + PRICE_FIELD_NUMBER;
     hash = (53 * hash) + getPrice().hashCode();
     hash = (37 * hash) + QUANTITY_FIELD_NUMBER;
     hash = (53 * hash) + getQuantity().hashCode();
+    hash = (37 * hash) + ORDERID_FIELD_NUMBER;
+    hash = (53 * hash) + getOrderId().hashCode();
+    hash = (37 * hash) + SYMBOL_FIELD_NUMBER;
+    hash = (53 * hash) + getSymbol().hashCode();
     hash = (29 * hash) + unknownFields.hashCode();
     memoizedHashCode = hash;
     return hash;
@@ -402,9 +540,15 @@ private static final long serialVersionUID = 0L;
       super.clear();
       isBuy_ = false;
 
+      isDelete_ = false;
+
       price_ = "";
 
       quantity_ = "";
+
+      orderId_ = "";
+
+      symbol_ = "";
 
       return this;
     }
@@ -433,8 +577,11 @@ private static final long serialVersionUID = 0L;
     public Book buildPartial() {
       Book result = new Book(this);
       result.isBuy_ = isBuy_;
+      result.isDelete_ = isDelete_;
       result.price_ = price_;
       result.quantity_ = quantity_;
+      result.orderId_ = orderId_;
+      result.symbol_ = symbol_;
       onBuilt();
       return result;
     }
@@ -486,12 +633,23 @@ private static final long serialVersionUID = 0L;
       if (other.getIsBuy() != false) {
         setIsBuy(other.getIsBuy());
       }
+      if (other.getIsDelete() != false) {
+        setIsDelete(other.getIsDelete());
+      }
       if (!other.getPrice().isEmpty()) {
         price_ = other.price_;
         onChanged();
       }
       if (!other.getQuantity().isEmpty()) {
         quantity_ = other.quantity_;
+        onChanged();
+      }
+      if (!other.getOrderId().isEmpty()) {
+        orderId_ = other.orderId_;
+        onChanged();
+      }
+      if (!other.getSymbol().isEmpty()) {
+        symbol_ = other.symbol_;
         onChanged();
       }
       this.mergeUnknownFields(other.unknownFields);
@@ -554,9 +712,40 @@ private static final long serialVersionUID = 0L;
       return this;
     }
 
+    private boolean isDelete_ ;
+    /**
+     * <code>bool isDelete = 2;</code>
+     * @return The isDelete.
+     */
+    @Override
+    public boolean getIsDelete() {
+      return isDelete_;
+    }
+    /**
+     * <code>bool isDelete = 2;</code>
+     * @param value The isDelete to set.
+     * @return This builder for chaining.
+     */
+    public Builder setIsDelete(boolean value) {
+      
+      isDelete_ = value;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>bool isDelete = 2;</code>
+     * @return This builder for chaining.
+     */
+    public Builder clearIsDelete() {
+      
+      isDelete_ = false;
+      onChanged();
+      return this;
+    }
+
     private Object price_ = "";
     /**
-     * <code>string price = 2;</code>
+     * <code>string price = 3;</code>
      * @return The price.
      */
     public String getPrice() {
@@ -572,7 +761,7 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
-     * <code>string price = 2;</code>
+     * <code>string price = 3;</code>
      * @return The bytes for price.
      */
     public com.google.protobuf.ByteString
@@ -589,7 +778,7 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
-     * <code>string price = 2;</code>
+     * <code>string price = 3;</code>
      * @param value The price to set.
      * @return This builder for chaining.
      */
@@ -604,7 +793,7 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>string price = 2;</code>
+     * <code>string price = 3;</code>
      * @return This builder for chaining.
      */
     public Builder clearPrice() {
@@ -614,7 +803,7 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>string price = 2;</code>
+     * <code>string price = 3;</code>
      * @param value The bytes for price to set.
      * @return This builder for chaining.
      */
@@ -632,7 +821,7 @@ private static final long serialVersionUID = 0L;
 
     private Object quantity_ = "";
     /**
-     * <code>string quantity = 3;</code>
+     * <code>string quantity = 4;</code>
      * @return The quantity.
      */
     public String getQuantity() {
@@ -648,7 +837,7 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
-     * <code>string quantity = 3;</code>
+     * <code>string quantity = 4;</code>
      * @return The bytes for quantity.
      */
     public com.google.protobuf.ByteString
@@ -665,7 +854,7 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
-     * <code>string quantity = 3;</code>
+     * <code>string quantity = 4;</code>
      * @param value The quantity to set.
      * @return This builder for chaining.
      */
@@ -680,7 +869,7 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>string quantity = 3;</code>
+     * <code>string quantity = 4;</code>
      * @return This builder for chaining.
      */
     public Builder clearQuantity() {
@@ -690,7 +879,7 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>string quantity = 3;</code>
+     * <code>string quantity = 4;</code>
      * @param value The bytes for quantity to set.
      * @return This builder for chaining.
      */
@@ -702,6 +891,158 @@ private static final long serialVersionUID = 0L;
   checkByteStringIsUtf8(value);
       
       quantity_ = value;
+      onChanged();
+      return this;
+    }
+
+    private Object orderId_ = "";
+    /**
+     * <code>string orderId = 5;</code>
+     * @return The orderId.
+     */
+    public String getOrderId() {
+      Object ref = orderId_;
+      if (!(ref instanceof String)) {
+        com.google.protobuf.ByteString bs =
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        orderId_ = s;
+        return s;
+      } else {
+        return (String) ref;
+      }
+    }
+    /**
+     * <code>string orderId = 5;</code>
+     * @return The bytes for orderId.
+     */
+    public com.google.protobuf.ByteString
+        getOrderIdBytes() {
+      Object ref = orderId_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (String) ref);
+        orderId_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    /**
+     * <code>string orderId = 5;</code>
+     * @param value The orderId to set.
+     * @return This builder for chaining.
+     */
+    public Builder setOrderId(
+        String value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  
+      orderId_ = value;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>string orderId = 5;</code>
+     * @return This builder for chaining.
+     */
+    public Builder clearOrderId() {
+      
+      orderId_ = getDefaultInstance().getOrderId();
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>string orderId = 5;</code>
+     * @param value The bytes for orderId to set.
+     * @return This builder for chaining.
+     */
+    public Builder setOrderIdBytes(
+        com.google.protobuf.ByteString value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+      
+      orderId_ = value;
+      onChanged();
+      return this;
+    }
+
+    private Object symbol_ = "";
+    /**
+     * <code>string symbol = 6;</code>
+     * @return The symbol.
+     */
+    public String getSymbol() {
+      Object ref = symbol_;
+      if (!(ref instanceof String)) {
+        com.google.protobuf.ByteString bs =
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        symbol_ = s;
+        return s;
+      } else {
+        return (String) ref;
+      }
+    }
+    /**
+     * <code>string symbol = 6;</code>
+     * @return The bytes for symbol.
+     */
+    public com.google.protobuf.ByteString
+        getSymbolBytes() {
+      Object ref = symbol_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (String) ref);
+        symbol_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    /**
+     * <code>string symbol = 6;</code>
+     * @param value The symbol to set.
+     * @return This builder for chaining.
+     */
+    public Builder setSymbol(
+        String value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  
+      symbol_ = value;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>string symbol = 6;</code>
+     * @return This builder for chaining.
+     */
+    public Builder clearSymbol() {
+      
+      symbol_ = getDefaultInstance().getSymbol();
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>string symbol = 6;</code>
+     * @param value The bytes for symbol to set.
+     * @return This builder for chaining.
+     */
+    public Builder setSymbolBytes(
+        com.google.protobuf.ByteString value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+      
+      symbol_ = value;
       onChanged();
       return this;
     }

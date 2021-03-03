@@ -30,8 +30,8 @@ public class QuoteServerSubscriber {
 
     Subscriptions prepareSubscriptions() {
         Subscriptions.Builder builder = Subscriptions.newBuilder();
-        for (int idx = 0; idx < SYMBOLS.length; ++idx) {
-            builder.setSubscription(idx, SYMBOLS[idx]);
+        for (String symbol : SYMBOLS) {
+            builder.addSubscription(symbol);
         }
         return builder.build();
     }

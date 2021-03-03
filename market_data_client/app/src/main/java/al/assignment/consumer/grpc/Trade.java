@@ -18,6 +18,7 @@ private static final long serialVersionUID = 0L;
   private Trade() {
     price_ = "";
     quantity_ = "";
+    symbol_ = "";
   }
 
   @java.lang.Override
@@ -65,6 +66,12 @@ private static final long serialVersionUID = 0L;
             java.lang.String s = input.readStringRequireUtf8();
 
             quantity_ = s;
+            break;
+          }
+          case 34: {
+            java.lang.String s = input.readStringRequireUtf8();
+
+            symbol_ = s;
             break;
           }
           default: {
@@ -186,6 +193,44 @@ private static final long serialVersionUID = 0L;
     }
   }
 
+  public static final int SYMBOL_FIELD_NUMBER = 4;
+  private volatile java.lang.Object symbol_;
+  /**
+   * <code>string symbol = 4;</code>
+   * @return The symbol.
+   */
+  @java.lang.Override
+  public java.lang.String getSymbol() {
+    java.lang.Object ref = symbol_;
+    if (ref instanceof java.lang.String) {
+      return (java.lang.String) ref;
+    } else {
+      com.google.protobuf.ByteString bs = 
+          (com.google.protobuf.ByteString) ref;
+      java.lang.String s = bs.toStringUtf8();
+      symbol_ = s;
+      return s;
+    }
+  }
+  /**
+   * <code>string symbol = 4;</code>
+   * @return The bytes for symbol.
+   */
+  @java.lang.Override
+  public com.google.protobuf.ByteString
+      getSymbolBytes() {
+    java.lang.Object ref = symbol_;
+    if (ref instanceof java.lang.String) {
+      com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString.copyFromUtf8(
+              (java.lang.String) ref);
+      symbol_ = b;
+      return b;
+    } else {
+      return (com.google.protobuf.ByteString) ref;
+    }
+  }
+
   private byte memoizedIsInitialized = -1;
   @java.lang.Override
   public final boolean isInitialized() {
@@ -209,6 +254,9 @@ private static final long serialVersionUID = 0L;
     if (!getQuantityBytes().isEmpty()) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 3, quantity_);
     }
+    if (!getSymbolBytes().isEmpty()) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 4, symbol_);
+    }
     unknownFields.writeTo(output);
   }
 
@@ -227,6 +275,9 @@ private static final long serialVersionUID = 0L;
     }
     if (!getQuantityBytes().isEmpty()) {
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, quantity_);
+    }
+    if (!getSymbolBytes().isEmpty()) {
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(4, symbol_);
     }
     size += unknownFields.getSerializedSize();
     memoizedSize = size;
@@ -249,6 +300,8 @@ private static final long serialVersionUID = 0L;
         .equals(other.getPrice())) return false;
     if (!getQuantity()
         .equals(other.getQuantity())) return false;
+    if (!getSymbol()
+        .equals(other.getSymbol())) return false;
     if (!unknownFields.equals(other.unknownFields)) return false;
     return true;
   }
@@ -267,6 +320,8 @@ private static final long serialVersionUID = 0L;
     hash = (53 * hash) + getPrice().hashCode();
     hash = (37 * hash) + QUANTITY_FIELD_NUMBER;
     hash = (53 * hash) + getQuantity().hashCode();
+    hash = (37 * hash) + SYMBOL_FIELD_NUMBER;
+    hash = (53 * hash) + getSymbol().hashCode();
     hash = (29 * hash) + unknownFields.hashCode();
     memoizedHashCode = hash;
     return hash;
@@ -406,6 +461,8 @@ private static final long serialVersionUID = 0L;
 
       quantity_ = "";
 
+      symbol_ = "";
+
       return this;
     }
 
@@ -435,6 +492,7 @@ private static final long serialVersionUID = 0L;
       result.isBuy_ = isBuy_;
       result.price_ = price_;
       result.quantity_ = quantity_;
+      result.symbol_ = symbol_;
       onBuilt();
       return result;
     }
@@ -492,6 +550,10 @@ private static final long serialVersionUID = 0L;
       }
       if (!other.getQuantity().isEmpty()) {
         quantity_ = other.quantity_;
+        onChanged();
+      }
+      if (!other.getSymbol().isEmpty()) {
+        symbol_ = other.symbol_;
         onChanged();
       }
       this.mergeUnknownFields(other.unknownFields);
@@ -702,6 +764,82 @@ private static final long serialVersionUID = 0L;
   checkByteStringIsUtf8(value);
       
       quantity_ = value;
+      onChanged();
+      return this;
+    }
+
+    private java.lang.Object symbol_ = "";
+    /**
+     * <code>string symbol = 4;</code>
+     * @return The symbol.
+     */
+    public java.lang.String getSymbol() {
+      java.lang.Object ref = symbol_;
+      if (!(ref instanceof java.lang.String)) {
+        com.google.protobuf.ByteString bs =
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        symbol_ = s;
+        return s;
+      } else {
+        return (java.lang.String) ref;
+      }
+    }
+    /**
+     * <code>string symbol = 4;</code>
+     * @return The bytes for symbol.
+     */
+    public com.google.protobuf.ByteString
+        getSymbolBytes() {
+      java.lang.Object ref = symbol_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        symbol_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    /**
+     * <code>string symbol = 4;</code>
+     * @param value The symbol to set.
+     * @return This builder for chaining.
+     */
+    public Builder setSymbol(
+        java.lang.String value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  
+      symbol_ = value;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>string symbol = 4;</code>
+     * @return This builder for chaining.
+     */
+    public Builder clearSymbol() {
+      
+      symbol_ = getDefaultInstance().getSymbol();
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>string symbol = 4;</code>
+     * @param value The bytes for symbol to set.
+     * @return This builder for chaining.
+     */
+    public Builder setSymbolBytes(
+        com.google.protobuf.ByteString value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+      
+      symbol_ = value;
       onChanged();
       return this;
     }
