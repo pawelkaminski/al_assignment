@@ -1,8 +1,6 @@
 package al.assignment.symbolprocessor;
 
-import al.assignment.utils.Order;
-import al.assignment.utils.OrderBook;
-import al.assignment.utils.WebSocketQueue;
+import al.assignment.utils.*;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -13,20 +11,25 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class SymbolProcessor implements Runnable {
     private final WebSocketQueue queue;
     private final String symbol;
-    private OrderBook book;
     private Long firstsequenceID;
-    JSONParser parser;
+    private JSONParser parser;
+
+    private OrderBook book;
+    private Map<ClientAddress, MessagesToClientQueue> consumerMap;
 
     public SymbolProcessor(String symbol, WebSocketQueue queue) {
         this.queue = queue;
         this.symbol = symbol;
         this.parser = new JSONParser();
         this.book = new OrderBook();
+        this.consumerMap = new HashMap<>();
     }
 
     public void run() {

@@ -81,7 +81,7 @@ public class Order {
         this.quantity = first + "." + string;
     }
 
-    private long getMul(long result, int size){
+    private long getMul(long result, int size) {
         for (int idx = 0; idx < size; ++idx) {
             result *= 10L;
         }
