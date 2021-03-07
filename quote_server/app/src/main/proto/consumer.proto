@@ -21,10 +21,10 @@ message Trade {
 }
 
 message Book {
-    bool isBuy = 1;
-    bool isDelete = 2;
-    string price = 3;
-    string quantity = 4;
-    string orderId = 5;
-    string symbol = 6;
+    bool isDelete = 1;
+    string orderId = 2;
+    string symbol = 3;
+    bool isBuy = 4;
+    string price = 5;
+    string quantity = 6;
 }

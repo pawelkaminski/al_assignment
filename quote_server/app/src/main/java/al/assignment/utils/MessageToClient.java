@@ -7,11 +7,11 @@ public class MessageToClient {
     public Trade trade;
     public Book book;
 
-    MessageToClient(Trade trade) {
+    public MessageToClient(Trade trade) {
         this.trade = trade;
     }
 
-    MessageToClient(Book book) {
+    public MessageToClient(Book book) {
         this.book = book;
     }
 
