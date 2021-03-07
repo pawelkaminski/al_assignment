@@ -1,10 +1,10 @@
 package al.assignment.utils;
 
 public class ClientAddress {
-    String port;
-    String host;
+    private final String port;
+    private final String host;
 
-    ClientAddress(String host, String port) {
+    public ClientAddress(String host, String port) {
         this.host = host;
         this.port = port;
     }

@@ -1,4 +1,6 @@
-package al.assignment.utils;
+package al.assignment.symbolprocessor;
+
+import al.assignment.consumer.grpc.Book;
 
 import java.util.Arrays;
 
@@ -11,6 +13,20 @@ public class Order {
         this.isBuy = isBuy;
         this.price = price;
         this.quantity = quantity;
+    }
+
+    public Book getBookProto(String symbol, String orderId, boolean isDelete) {
+        if (quantity.equals("0")) {
+            isDelete = true;
+        }
+        Book.Builder builder = Book.newBuilder();
+        builder.setIsBuy(this.isBuy);
+        builder.setIsDelete(isDelete);
+        builder.setSymbol(symbol);
+        builder.setPrice(price);
+        builder.setQuantity(quantity);
+        builder.setOrderId(orderId);
+        return builder.build();
     }
 
     public boolean decreaseQuantity(String other) {
@@ -87,5 +103,4 @@ public class Order {
         }
         return result;
     }
-
 }

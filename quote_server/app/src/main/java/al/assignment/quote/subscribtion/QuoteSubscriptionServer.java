@@ -1,5 +1,6 @@
 package al.assignment.quote.subscribtion;
 
+import al.assignment.utils.SubscriptionUpdatesQueue;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
 
@@ -12,8 +13,8 @@ public class QuoteSubscriptionServer {
 
     private Server server;
 
-    public void start() throws IOException {
-        server = ServerBuilder.forPort(QS_PORT).addService(new SubscriberGrpcImpl()).build().start();
+    public void start(SubscriptionUpdatesQueue queue) throws IOException {
+        server = ServerBuilder.forPort(QS_PORT).addService(new SubscriberGrpcImpl(queue)).build().start();
         System.out.println("Server started, listening on " + QS_PORT);
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             // Use stderr here since the logger may have been reset by its JVM shutdown hook.

@@ -17,12 +17,14 @@ message Trade {
     bool isBuy = 1;
     string price = 2;
     string quantity = 3;
+    string symbol = 4;
 }
 
 message Book {
-    bool isBuy = 1;
-    bool isDelete = 2;
-    string price = 3;
-    string quantity = 4;
-    string orderId = 5;
+    bool isDelete = 1;
+    string orderId = 2;
+    string symbol = 3
+    optional bool isBuy = 4;
+    optional string price = 5;
+    optional string quantity = 6;
 }

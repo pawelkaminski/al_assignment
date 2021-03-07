@@ -9,6 +9,8 @@ import io.grpc.StatusRuntimeException;
 import java.util.Arrays;
 
 public class QuoteServerSubscriber {
+    private static final String MD_PORT = System.getenv().getOrDefault("MD_PORT", "5001");
+    private static final String MD_HOST = System.getenv().getOrDefault("MD_HOST", "localhost");
     private static final int QS_PORT = Integer.parseInt(System.getenv().getOrDefault("QS_PORT", "5000"));
     private static final String QS_HOST = System.getenv().getOrDefault("QS_HOST", "localhost");
     private static final String[] SYMBOLS = System.getenv().getOrDefault("SYMBOLS", "ETH-USD ETH-BTC").split(" ");
@@ -30,6 +32,8 @@ public class QuoteServerSubscriber {
 
     Subscriptions prepareSubscriptions() {
         Subscriptions.Builder builder = Subscriptions.newBuilder();
+        builder.setHost(MD_HOST);
+        builder.setPort(MD_PORT);
         for (String symbol : SYMBOLS) {
             builder.addSubscription(symbol);
         }

@@ -14,29 +14,29 @@ public final class ConsumerGrpc {
   public static final String SERVICE_NAME = "Consumer";
 
   // Static method descriptors that strictly reflect the proto.
-  private static volatile io.grpc.MethodDescriptor<al.assignment.consumer.grpc.Trade,
-      al.assignment.consumer.grpc.ConsumerStatus> getOnTradeMethod;
+  private static volatile io.grpc.MethodDescriptor<Trade,
+      ConsumerStatus> getOnTradeMethod;
 
   @io.grpc.stub.annotations.RpcMethod(
       fullMethodName = SERVICE_NAME + '/' + "onTrade",
-      requestType = al.assignment.consumer.grpc.Trade.class,
-      responseType = al.assignment.consumer.grpc.ConsumerStatus.class,
+      requestType = Trade.class,
+      responseType = ConsumerStatus.class,
       methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
-  public static io.grpc.MethodDescriptor<al.assignment.consumer.grpc.Trade,
-      al.assignment.consumer.grpc.ConsumerStatus> getOnTradeMethod() {
-    io.grpc.MethodDescriptor<al.assignment.consumer.grpc.Trade, al.assignment.consumer.grpc.ConsumerStatus> getOnTradeMethod;
+  public static io.grpc.MethodDescriptor<Trade,
+      ConsumerStatus> getOnTradeMethod() {
+    io.grpc.MethodDescriptor<Trade, ConsumerStatus> getOnTradeMethod;
     if ((getOnTradeMethod = ConsumerGrpc.getOnTradeMethod) == null) {
       synchronized (ConsumerGrpc.class) {
         if ((getOnTradeMethod = ConsumerGrpc.getOnTradeMethod) == null) {
           ConsumerGrpc.getOnTradeMethod = getOnTradeMethod =
-              io.grpc.MethodDescriptor.<al.assignment.consumer.grpc.Trade, al.assignment.consumer.grpc.ConsumerStatus>newBuilder()
+              io.grpc.MethodDescriptor.<Trade, ConsumerStatus>newBuilder()
               .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
               .setFullMethodName(generateFullMethodName(SERVICE_NAME, "onTrade"))
               .setSampledToLocalTracing(true)
               .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  al.assignment.consumer.grpc.Trade.getDefaultInstance()))
+                  Trade.getDefaultInstance()))
               .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  al.assignment.consumer.grpc.ConsumerStatus.getDefaultInstance()))
+                  ConsumerStatus.getDefaultInstance()))
               .setSchemaDescriptor(new ConsumerMethodDescriptorSupplier("onTrade"))
               .build();
         }
@@ -45,29 +45,29 @@ public final class ConsumerGrpc {
     return getOnTradeMethod;
   }
 
-  private static volatile io.grpc.MethodDescriptor<al.assignment.consumer.grpc.Book,
-      al.assignment.consumer.grpc.ConsumerStatus> getOnBookMethod;
+  private static volatile io.grpc.MethodDescriptor<Book,
+      ConsumerStatus> getOnBookMethod;
 
   @io.grpc.stub.annotations.RpcMethod(
       fullMethodName = SERVICE_NAME + '/' + "onBook",
-      requestType = al.assignment.consumer.grpc.Book.class,
-      responseType = al.assignment.consumer.grpc.ConsumerStatus.class,
+      requestType = Book.class,
+      responseType = ConsumerStatus.class,
       methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
-  public static io.grpc.MethodDescriptor<al.assignment.consumer.grpc.Book,
-      al.assignment.consumer.grpc.ConsumerStatus> getOnBookMethod() {
-    io.grpc.MethodDescriptor<al.assignment.consumer.grpc.Book, al.assignment.consumer.grpc.ConsumerStatus> getOnBookMethod;
+  public static io.grpc.MethodDescriptor<Book,
+      ConsumerStatus> getOnBookMethod() {
+    io.grpc.MethodDescriptor<Book, ConsumerStatus> getOnBookMethod;
     if ((getOnBookMethod = ConsumerGrpc.getOnBookMethod) == null) {
       synchronized (ConsumerGrpc.class) {
         if ((getOnBookMethod = ConsumerGrpc.getOnBookMethod) == null) {
           ConsumerGrpc.getOnBookMethod = getOnBookMethod =
-              io.grpc.MethodDescriptor.<al.assignment.consumer.grpc.Book, al.assignment.consumer.grpc.ConsumerStatus>newBuilder()
+              io.grpc.MethodDescriptor.<Book, ConsumerStatus>newBuilder()
               .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
               .setFullMethodName(generateFullMethodName(SERVICE_NAME, "onBook"))
               .setSampledToLocalTracing(true)
               .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  al.assignment.consumer.grpc.Book.getDefaultInstance()))
+                  Book.getDefaultInstance()))
               .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  al.assignment.consumer.grpc.ConsumerStatus.getDefaultInstance()))
+                  ConsumerStatus.getDefaultInstance()))
               .setSchemaDescriptor(new ConsumerMethodDescriptorSupplier("onBook"))
               .build();
         }
@@ -82,7 +82,7 @@ public final class ConsumerGrpc {
   public static ConsumerStub newStub(io.grpc.Channel channel) {
     io.grpc.stub.AbstractStub.StubFactory<ConsumerStub> factory =
       new io.grpc.stub.AbstractStub.StubFactory<ConsumerStub>() {
-        @java.lang.Override
+        @Override
         public ConsumerStub newStub(io.grpc.Channel channel, io.grpc.CallOptions callOptions) {
           return new ConsumerStub(channel, callOptions);
         }
@@ -97,7 +97,7 @@ public final class ConsumerGrpc {
       io.grpc.Channel channel) {
     io.grpc.stub.AbstractStub.StubFactory<ConsumerBlockingStub> factory =
       new io.grpc.stub.AbstractStub.StubFactory<ConsumerBlockingStub>() {
-        @java.lang.Override
+        @Override
         public ConsumerBlockingStub newStub(io.grpc.Channel channel, io.grpc.CallOptions callOptions) {
           return new ConsumerBlockingStub(channel, callOptions);
         }
@@ -112,7 +112,7 @@ public final class ConsumerGrpc {
       io.grpc.Channel channel) {
     io.grpc.stub.AbstractStub.StubFactory<ConsumerFutureStub> factory =
       new io.grpc.stub.AbstractStub.StubFactory<ConsumerFutureStub>() {
-        @java.lang.Override
+        @Override
         public ConsumerFutureStub newStub(io.grpc.Channel channel, io.grpc.CallOptions callOptions) {
           return new ConsumerFutureStub(channel, callOptions);
         }
@@ -126,33 +126,33 @@ public final class ConsumerGrpc {
 
     /**
      */
-    public void onTrade(al.assignment.consumer.grpc.Trade request,
-        io.grpc.stub.StreamObserver<al.assignment.consumer.grpc.ConsumerStatus> responseObserver) {
+    public void onTrade(Trade request,
+                        io.grpc.stub.StreamObserver<ConsumerStatus> responseObserver) {
       io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(getOnTradeMethod(), responseObserver);
     }
 
     /**
      */
-    public void onBook(al.assignment.consumer.grpc.Book request,
-        io.grpc.stub.StreamObserver<al.assignment.consumer.grpc.ConsumerStatus> responseObserver) {
+    public void onBook(Book request,
+                       io.grpc.stub.StreamObserver<ConsumerStatus> responseObserver) {
       io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(getOnBookMethod(), responseObserver);
     }
 
-    @java.lang.Override public final io.grpc.ServerServiceDefinition bindService() {
+    @Override public final io.grpc.ServerServiceDefinition bindService() {
       return io.grpc.ServerServiceDefinition.builder(getServiceDescriptor())
           .addMethod(
             getOnTradeMethod(),
             io.grpc.stub.ServerCalls.asyncUnaryCall(
               new MethodHandlers<
-                al.assignment.consumer.grpc.Trade,
-                al.assignment.consumer.grpc.ConsumerStatus>(
+                Trade,
+                ConsumerStatus>(
                   this, METHODID_ON_TRADE)))
           .addMethod(
             getOnBookMethod(),
             io.grpc.stub.ServerCalls.asyncUnaryCall(
               new MethodHandlers<
-                al.assignment.consumer.grpc.Book,
-                al.assignment.consumer.grpc.ConsumerStatus>(
+                Book,
+                ConsumerStatus>(
                   this, METHODID_ON_BOOK)))
           .build();
     }
@@ -166,7 +166,7 @@ public final class ConsumerGrpc {
       super(channel, callOptions);
     }
 
-    @java.lang.Override
+    @Override
     protected ConsumerStub build(
         io.grpc.Channel channel, io.grpc.CallOptions callOptions) {
       return new ConsumerStub(channel, callOptions);
@@ -174,16 +174,16 @@ public final class ConsumerGrpc {
 
     /**
      */
-    public void onTrade(al.assignment.consumer.grpc.Trade request,
-        io.grpc.stub.StreamObserver<al.assignment.consumer.grpc.ConsumerStatus> responseObserver) {
+    public void onTrade(Trade request,
+                        io.grpc.stub.StreamObserver<ConsumerStatus> responseObserver) {
       io.grpc.stub.ClientCalls.asyncUnaryCall(
           getChannel().newCall(getOnTradeMethod(), getCallOptions()), request, responseObserver);
     }
 
     /**
      */
-    public void onBook(al.assignment.consumer.grpc.Book request,
-        io.grpc.stub.StreamObserver<al.assignment.consumer.grpc.ConsumerStatus> responseObserver) {
+    public void onBook(Book request,
+                       io.grpc.stub.StreamObserver<ConsumerStatus> responseObserver) {
       io.grpc.stub.ClientCalls.asyncUnaryCall(
           getChannel().newCall(getOnBookMethod(), getCallOptions()), request, responseObserver);
     }
@@ -197,7 +197,7 @@ public final class ConsumerGrpc {
       super(channel, callOptions);
     }
 
-    @java.lang.Override
+    @Override
     protected ConsumerBlockingStub build(
         io.grpc.Channel channel, io.grpc.CallOptions callOptions) {
       return new ConsumerBlockingStub(channel, callOptions);
@@ -205,14 +205,14 @@ public final class ConsumerGrpc {
 
     /**
      */
-    public al.assignment.consumer.grpc.ConsumerStatus onTrade(al.assignment.consumer.grpc.Trade request) {
+    public ConsumerStatus onTrade(Trade request) {
       return io.grpc.stub.ClientCalls.blockingUnaryCall(
           getChannel(), getOnTradeMethod(), getCallOptions(), request);
     }
 
     /**
      */
-    public al.assignment.consumer.grpc.ConsumerStatus onBook(al.assignment.consumer.grpc.Book request) {
+    public ConsumerStatus onBook(Book request) {
       return io.grpc.stub.ClientCalls.blockingUnaryCall(
           getChannel(), getOnBookMethod(), getCallOptions(), request);
     }
@@ -226,7 +226,7 @@ public final class ConsumerGrpc {
       super(channel, callOptions);
     }
 
-    @java.lang.Override
+    @Override
     protected ConsumerFutureStub build(
         io.grpc.Channel channel, io.grpc.CallOptions callOptions) {
       return new ConsumerFutureStub(channel, callOptions);
@@ -234,16 +234,16 @@ public final class ConsumerGrpc {
 
     /**
      */
-    public com.google.common.util.concurrent.ListenableFuture<al.assignment.consumer.grpc.ConsumerStatus> onTrade(
-        al.assignment.consumer.grpc.Trade request) {
+    public com.google.common.util.concurrent.ListenableFuture<ConsumerStatus> onTrade(
+        Trade request) {
       return io.grpc.stub.ClientCalls.futureUnaryCall(
           getChannel().newCall(getOnTradeMethod(), getCallOptions()), request);
     }
 
     /**
      */
-    public com.google.common.util.concurrent.ListenableFuture<al.assignment.consumer.grpc.ConsumerStatus> onBook(
-        al.assignment.consumer.grpc.Book request) {
+    public com.google.common.util.concurrent.ListenableFuture<ConsumerStatus> onBook(
+        Book request) {
       return io.grpc.stub.ClientCalls.futureUnaryCall(
           getChannel().newCall(getOnBookMethod(), getCallOptions()), request);
     }
@@ -265,25 +265,25 @@ public final class ConsumerGrpc {
       this.methodId = methodId;
     }
 
-    @java.lang.Override
-    @java.lang.SuppressWarnings("unchecked")
+    @Override
+    @SuppressWarnings("unchecked")
     public void invoke(Req request, io.grpc.stub.StreamObserver<Resp> responseObserver) {
       switch (methodId) {
         case METHODID_ON_TRADE:
-          serviceImpl.onTrade((al.assignment.consumer.grpc.Trade) request,
-              (io.grpc.stub.StreamObserver<al.assignment.consumer.grpc.ConsumerStatus>) responseObserver);
+          serviceImpl.onTrade((Trade) request,
+              (io.grpc.stub.StreamObserver<ConsumerStatus>) responseObserver);
           break;
         case METHODID_ON_BOOK:
-          serviceImpl.onBook((al.assignment.consumer.grpc.Book) request,
-              (io.grpc.stub.StreamObserver<al.assignment.consumer.grpc.ConsumerStatus>) responseObserver);
+          serviceImpl.onBook((Book) request,
+              (io.grpc.stub.StreamObserver<ConsumerStatus>) responseObserver);
           break;
         default:
           throw new AssertionError();
       }
     }
 
-    @java.lang.Override
-    @java.lang.SuppressWarnings("unchecked")
+    @Override
+    @SuppressWarnings("unchecked")
     public io.grpc.stub.StreamObserver<Req> invoke(
         io.grpc.stub.StreamObserver<Resp> responseObserver) {
       switch (methodId) {
@@ -297,12 +297,12 @@ public final class ConsumerGrpc {
       implements io.grpc.protobuf.ProtoFileDescriptorSupplier, io.grpc.protobuf.ProtoServiceDescriptorSupplier {
     ConsumerBaseDescriptorSupplier() {}
 
-    @java.lang.Override
+    @Override
     public com.google.protobuf.Descriptors.FileDescriptor getFileDescriptor() {
-      return al.assignment.consumer.grpc.ConsumerInterface.getDescriptor();
+      return ConsumerInterface.getDescriptor();
     }
 
-    @java.lang.Override
+    @Override
     public com.google.protobuf.Descriptors.ServiceDescriptor getServiceDescriptor() {
       return getFileDescriptor().findServiceByName("Consumer");
     }
@@ -322,7 +322,7 @@ public final class ConsumerGrpc {
       this.methodName = methodName;
     }
 
-    @java.lang.Override
+    @Override
     public com.google.protobuf.Descriptors.MethodDescriptor getMethodDescriptor() {
       return getServiceDescriptor().findMethodByName(methodName);
     }

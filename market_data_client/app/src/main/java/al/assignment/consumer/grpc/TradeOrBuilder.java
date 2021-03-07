@@ -17,7 +17,7 @@ public interface TradeOrBuilder extends
    * <code>string price = 2;</code>
    * @return The price.
    */
-  java.lang.String getPrice();
+  String getPrice();
   /**
    * <code>string price = 2;</code>
    * @return The bytes for price.
@@ -29,7 +29,7 @@ public interface TradeOrBuilder extends
    * <code>string quantity = 3;</code>
    * @return The quantity.
    */
-  java.lang.String getQuantity();
+  String getQuantity();
   /**
    * <code>string quantity = 3;</code>
    * @return The bytes for quantity.
@@ -41,7 +41,7 @@ public interface TradeOrBuilder extends
    * <code>string symbol = 4;</code>
    * @return The symbol.
    */
-  java.lang.String getSymbol();
+  String getSymbol();
   /**
    * <code>string symbol = 4;</code>
    * @return The bytes for symbol.
