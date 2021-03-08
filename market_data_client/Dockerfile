@@ -38,6 +38,5 @@ COPY scripts/entrypoint.sh scripts/command.sh /
 # TODO(pawelk): add HEALTHCHECK --interval=20s --timeout=1s --retries=3 CMD ["bash", "/healthcheck.sh"]
 
 #### Execution command
-EXPOSE 80
 ENTRYPOINT ["bash", "/entrypoint.sh"]
 CMD ["bash", "/command.sh"]

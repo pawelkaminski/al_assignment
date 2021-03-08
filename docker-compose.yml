@@ -2,3 +2,32 @@ version: "3.5"
 services:
   quote-server:
     image: "quote_server"
+    ports:
+      - 5001:5001
+    environment:
+      - QS_PORT=5001
+      - QS_HOST=172.17.0.1
+  client1:
+    image: "client"
+    depends_on:
+      - "quote-server"
+    environment:
+      - MD_PORT=5002
+      - MD_HOST=172.17.0.1
+      - QS_PORT=5001
+      - QS_HOST=172.17.0.1
+      - SYMBOLS=ETH-USD
+    ports:
+      - 80:5002
+  client2:
+    image: "client"
+    environment:
+      - MD_PORT=5003
+      - MD_HOST=172.17.0.1
+      - QS_PORT=5001
+      - QS_HOST=172.17.0.1
+      - SYMBOLS=ETH-BTC
+    ports:
+      - 80:5003
+    depends_on:
+      - "quote-server"
