@@ -8,7 +8,10 @@ import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 public class QuoteSubscriptionServer {
-    private static final int QS_PORT = Integer.parseInt(System.getenv().getOrDefault("MD_PORT", "5000"));
+
+    private static final int QS_PORT = Integer.parseInt(System.getenv().getOrDefault("QS_PORT", "5000"));
+    private static final String QS_HOST = System.getenv().getOrDefault("QS_HOST", "localhost");
+
     private Server server;
 
     public void start(SubscriptionUpdatesQueue queue) throws IOException {

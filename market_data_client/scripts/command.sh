@@ -1,2 +1,4 @@
 #!/usr/bin/env bash
-java -jar /home/app/target/model-runtime-1.0-SNAPSHOT-jar-with-dependencies.jar
+
+sleep 10
+java -jar /home/app/target/market-data-client-1.0-SNAPSHOT-jar-with-dependencies.jar
