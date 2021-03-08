@@ -34,7 +34,7 @@ public class ClientRPCSender extends Thread {
     }
 
     private void prepareConnection(){
-        System.out.println("CLIENT RPC SENDER PREPRATTION");
+        System.out.println("CLIENT RPC SENDER PREPARATION");
         String target = address.getUrl();
         channel = ManagedChannelBuilder.forTarget(target).usePlaintext().build();
         blockingStub = ConsumerGrpc.newBlockingStub(channel);

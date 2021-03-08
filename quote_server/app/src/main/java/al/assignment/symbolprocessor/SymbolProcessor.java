@@ -24,12 +24,12 @@ import java.util.concurrent.ArrayBlockingQueue;
 public class SymbolProcessor extends Thread {
     private final WebSocketQueue queue;
     private final String symbol;
-    private Long firstsequenceID;
-    private JSONParser parser;
-
-    private OrderBook book;
-    private Map<ClientAddress, MessagesToClientQueue> consumerMap;
-    private ArrayBlockingQueue<ClientUpdateData> clientUpdates;
+    private Long firstSequenceID;
+    private final JSONParser parser;
+    private boolean active;
+    private final OrderBook book;
+    private final Map<ClientAddress, MessagesToClientQueue> consumerMap;
+    private final ArrayBlockingQueue<ClientUpdateData> clientUpdates;
 
     public SymbolProcessor(String symbol, WebSocketQueue queue) {
         this.queue = queue;
@@ -37,16 +37,8 @@ public class SymbolProcessor extends Thread {
         this.parser = new JSONParser();
         this.book = new OrderBook();
         this.consumerMap = new HashMap<>();
-        this.clientUpdates = new ArrayBlockingQueue<ClientUpdateData>(100);
-    }
-
-    public SymbolProcessor(String symbol, WebSocketQueue queue, ClientAddress address, MessagesToClientQueue clientQueue) {
-        this.queue = queue;
-        this.symbol = symbol;
-        this.parser = new JSONParser();
-        this.book = new OrderBook();
-        this.consumerMap = new HashMap<>();
-        this.consumerMap.put(address, clientQueue);
+        this.clientUpdates = new ArrayBlockingQueue<>(100);
+        this.active = true;
     }
 
     public void removeClient(ClientAddress client) {
@@ -55,6 +47,10 @@ public class SymbolProcessor extends Thread {
 
     public void addClient(ClientAddress client, MessagesToClientQueue queue) {
         clientUpdates.add(new ClientUpdateData(client, queue));
+    }
+
+    public void terminate() {
+        active = false;
     }
 
     public void run() {
@@ -115,7 +111,7 @@ public class SymbolProcessor extends Thread {
 
         putMessages(false, (JSONArray) cleanedMessage.get("asks"));
         putMessages(true, (JSONArray) cleanedMessage.get("bids"));
-        firstsequenceID = (Long) cleanedMessage.get("sequence");
+        firstSequenceID = (Long) cleanedMessage.get("sequence");
     }
 
     private void putMessages(boolean side, JSONArray ordersList) {
@@ -130,9 +126,9 @@ public class SymbolProcessor extends Thread {
     }
 
     private void runQueueProcessing() {
-        System.out.println("WAITING TO CONSUME "+symbol);
+        System.out.printf("CONSUMING %s\n", symbol);
         try {
-            while (true) {
+            while (active) {
                 update();
                 consume(queue.take());
             }
@@ -154,7 +150,7 @@ public class SymbolProcessor extends Thread {
             return;
         }
 
-        if ((Long) cleanedMessage.get("sequence") <= firstsequenceID) {
+        if ((Long) cleanedMessage.get("sequence") <= firstSequenceID) {
             return;
         }
 
@@ -230,6 +226,9 @@ public class SymbolProcessor extends Thread {
     }
 
     private void addClientQueue(ClientUpdateData clientUpdate) {
+        if (consumerMap.containsKey(clientUpdate.client)) {
+            return;
+        }
         consumerMap.put(clientUpdate.client, clientUpdate.queue);
         propagateCurrentBook(clientUpdate.queue);
         System.out.printf("ADDED CLIENT %s SYMBOL PROCESSING %s \n", clientUpdate.client.getUrl(), symbol);

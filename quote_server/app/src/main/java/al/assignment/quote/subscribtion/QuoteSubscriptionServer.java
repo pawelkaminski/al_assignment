@@ -9,8 +9,6 @@ import java.util.concurrent.TimeUnit;
 
 public class QuoteSubscriptionServer {
     private static final int QS_PORT = Integer.parseInt(System.getenv().getOrDefault("MD_PORT", "5000"));
-    private static final String QS_HOST = System.getenv().getOrDefault("MD_HOST", "localhost");
-
     private Server server;
 
     public void start(SubscriptionUpdatesQueue queue) throws IOException {
@@ -33,12 +31,4 @@ public class QuoteSubscriptionServer {
             server.shutdown().awaitTermination(30, TimeUnit.SECONDS);
         }
     }
-
-    public void blockUntilShutdown() throws InterruptedException {
-        if (server != null) {
-            server.awaitTermination();
-        }
-    }
-
-
 }

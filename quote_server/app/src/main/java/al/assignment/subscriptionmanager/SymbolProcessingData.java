@@ -1,15 +1,16 @@
-package al.assignment.utils;
+package al.assignment.subscriptionmanager;
 
 import al.assignment.symbolprocessor.SymbolProcessor;
+import al.assignment.utils.ClientAddress;
 import org.java_websocket.client.WebSocketClient;
 
 import java.util.HashSet;
 import java.util.Set;
 
 public class SymbolProcessingData {
-    Set<ClientAddress> clients;
-    WebSocketClient subscriber;
-    SymbolProcessor processor;
+    public Set<ClientAddress> clients;
+    private final WebSocketClient subscriber;
+    public SymbolProcessor processor;
 
     public SymbolProcessingData(SymbolProcessor processor, WebSocketClient subscriber) {
         this.processor = processor;
@@ -25,4 +26,9 @@ public class SymbolProcessingData {
         clients.remove(client);
     }
 
+    public void deleteProcessor() throws InterruptedException {
+        subscriber.closeBlocking();
+        processor.terminate();
+        processor.join();
+    }
 }

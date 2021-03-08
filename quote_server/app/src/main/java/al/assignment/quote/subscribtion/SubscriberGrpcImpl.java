@@ -9,7 +9,7 @@ import al.assignment.utils.SubscriptionUpdatesQueue;
 import io.grpc.stub.StreamObserver;
 
 public class SubscriberGrpcImpl extends SubscriberGrpc.SubscriberImplBase {
-    private SubscriptionUpdatesQueue queue;
+    private final SubscriptionUpdatesQueue queue;
 
     SubscriberGrpcImpl(SubscriptionUpdatesQueue queue) {
         super();
