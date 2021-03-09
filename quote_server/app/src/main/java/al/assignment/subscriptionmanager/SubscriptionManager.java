@@ -22,7 +22,9 @@ public class SubscriptionManager {
     public void run() {
         try {
             while (true) {
+                System.out.println("WAITING FOR MESSAGE!!!!");
                 consume(queue.take());
+                System.out.println("MESSAGE PROCESSED!!!!");
             }
         } catch (InterruptedException ex) {
             ex.printStackTrace();
@@ -30,6 +32,7 @@ public class SubscriptionManager {
     }
 
     private void consume(SubscriptionUpdate update) throws InterruptedException {
+        System.out.println("TAKEN KILL MESSAGE!!!!");
         if (update.isUnsubscribe || update.symbols.isEmpty()) {
             removeAllSubscriptions(update.clientAddress);
             return;
@@ -54,6 +57,7 @@ public class SubscriptionManager {
 
         ClientProcessingData data = clientProcessingMap.get(address);
         data.getSender().terminate();
+        data.getSender().interrupt();
         data.getSender().join();
         clientProcessingMap.remove(address);
     }

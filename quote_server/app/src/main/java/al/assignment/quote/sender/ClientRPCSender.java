@@ -1,9 +1,7 @@
 package al.assignment.quote.sender;
 
 import al.assignment.consumer.grpc.ConsumerGrpc;
-import al.assignment.utils.ClientAddress;
-import al.assignment.utils.MessageToClient;
-import al.assignment.utils.MessagesToClientQueue;
+import al.assignment.utils.*;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 
@@ -14,7 +12,7 @@ public class ClientRPCSender extends Thread {
     private final ClientAddress address;
     private ConsumerGrpc.ConsumerBlockingStub blockingStub;
     private ManagedChannel channel;
-    private boolean active;
+    private volatile boolean active;
 
     public ClientRPCSender(MessagesToClientQueue queue, ClientAddress address) {
         this.queue = queue;
@@ -51,23 +49,27 @@ public class ClientRPCSender extends Thread {
     private void processMessages() {
         while (active) {
             try {
-                System.out.println("WAITING FOR MESSAGE " + address.getUrl());
                 send(queue.take());
-                System.out.println("SEND MESSAGE " + address.getUrl());
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-                // TODO(pawelk): handle dangling client connection
+            } catch (InterruptedException | RuntimeException e) {
+                System.out.printf("DEAD RPC CLIENT DETECTED %s\n", address.getUrl());
+                sendClientTerminationMessage();
             }
         }
     }
 
     private void send(MessageToClient message) {
         if (message.trade != null) {
+            System.out.printf("SEND TRADE MESSAGE %s %s \n", message.trade.getSymbol(), address.getUrl());
             blockingStub.onTrade(message.trade);
         }
         if (message.book != null) {
             blockingStub.onBook(message.book);
         }
+    }
+    private void sendClientTerminationMessage() {
+        SubscriptionUpdatesQueue queue = SubscriptionUpdatesQueue.getInstance();
+        queue.add(new SubscriptionUpdate(address));
+        terminate();
     }
 
 

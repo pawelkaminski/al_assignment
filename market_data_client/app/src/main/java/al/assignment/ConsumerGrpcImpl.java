@@ -11,7 +11,8 @@ public class ConsumerGrpcImpl extends ConsumerGrpc.ConsumerImplBase {
     @Override
     public void onTrade(Trade request,
                         StreamObserver<ConsumerStatus> responseObserver) {
-        System.out.printf("RECEIVED TRADE %s %s\n", request.getSymbol(), request.getPrice());
+        System.out.printf("RECEIVED TRADE SYMBOL: %s PRICE: %s QUANTITY: %s \n", request.getSymbol(),
+                request.getPrice(), request.getQuantity());
         responseObserver.onNext(ConsumerStatus.newBuilder().setStatus(true).build());
         responseObserver.onCompleted();
     }
@@ -19,7 +20,7 @@ public class ConsumerGrpcImpl extends ConsumerGrpc.ConsumerImplBase {
     @Override
     public void onBook(Book request,
                        StreamObserver<ConsumerStatus> responseObserver) {
-        System.out.println("RECEIVED BOOK " + request.getOrderId());
+        //System.out.println("RECEIVED BOOK " + request.getOrderId());
         responseObserver.onNext(ConsumerStatus.newBuilder().setStatus(true).build());
         responseObserver.onCompleted();
     }

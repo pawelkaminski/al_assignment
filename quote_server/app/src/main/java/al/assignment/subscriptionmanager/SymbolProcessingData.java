@@ -29,6 +29,7 @@ public class SymbolProcessingData {
     public void deleteProcessor() throws InterruptedException {
         subscriber.closeBlocking();
         processor.terminate();
+        processor.interrupt();
         processor.join();
     }
 }

@@ -18,7 +18,7 @@ services:
       - QS_HOST=172.17.0.1
       - SYMBOLS=ETH-USD
     ports:
-      - 80:5002
+      - 5002:5002
   client2:
     image: "client"
     environment:
@@ -28,6 +28,6 @@ services:
       - QS_HOST=172.17.0.1
       - SYMBOLS=ETH-BTC
     ports:
-      - 80:5003
+      - 5003:5003
     depends_on:
       - "quote-server"

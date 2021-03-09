@@ -17,7 +17,8 @@ public class QuoteServer {
 
     private static void startRPCServer() throws IOException {
         QuoteSubscriptionServer RPCServer = new QuoteSubscriptionServer();
-        queue = new SubscriptionUpdatesQueue();
+        queue = SubscriptionUpdatesQueue.getInstance();
+        System.out.println();
         RPCServer.start(queue);
     }
 }

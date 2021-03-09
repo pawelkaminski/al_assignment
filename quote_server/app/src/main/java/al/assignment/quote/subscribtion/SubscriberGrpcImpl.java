@@ -18,11 +18,9 @@ public class SubscriberGrpcImpl extends SubscriberGrpc.SubscriberImplBase {
 
     @Override
     public void subscribe(Subscriptions request, StreamObserver<ProducerStatus> responseObserver) {
-        System.out.println("RECEIVED SUBSCRIPTION" + request.getSubscriptionList().toString());
         responseObserver.onNext(updateSubscription(request));
-        System.out.println("PROCESSED SUBSCRIPTION" + request.getSubscriptionList().toString());
         responseObserver.onCompleted();
-        System.out.println("ADDED SUBSCRIPTION" + request.getSubscriptionList().toString());
+        System.out.println("COLLECTED SUBSCRIPTION" + request.getSubscriptionList().toString());
     }
 
     ProducerStatus updateSubscription(Subscriptions request) {

@@ -26,7 +26,7 @@ public class SymbolProcessor extends Thread {
     private final String symbol;
     private Long firstSequenceID;
     private final JSONParser parser;
-    private boolean active;
+    private volatile boolean active;
     private final OrderBook book;
     private final Map<ClientAddress, MessagesToClientQueue> consumerMap;
     private final ArrayBlockingQueue<ClientUpdateData> clientUpdates;
@@ -126,14 +126,14 @@ public class SymbolProcessor extends Thread {
     }
 
     private void runQueueProcessing() {
-        System.out.printf("CONSUMING %s\n", symbol);
+        System.out.printf("STARTED PROCESSING  %s\n", symbol);
         try {
             while (active) {
                 update();
                 consume(queue.take());
             }
         } catch (InterruptedException ex) {
-            ex.printStackTrace();
+            System.out.printf("CALLED INTERRUPTION %s\n", symbol);
         }
     }
 
@@ -222,7 +222,7 @@ public class SymbolProcessor extends Thread {
 
     private void deleteClientQueue(ClientUpdateData clientUpdate) {
         consumerMap.remove(clientUpdate.client);
-        System.out.printf("DELETED CLIENT %s SYMBOL PROCESSING %s \n", clientUpdate.client.getUrl(), symbol);
+        System.out.printf("DELETED CLIENT %s AT SYMBOL PROCESSING %s \n", clientUpdate.client.getUrl(), symbol);
     }
 
     private void addClientQueue(ClientUpdateData clientUpdate) {
@@ -231,7 +231,7 @@ public class SymbolProcessor extends Thread {
         }
         consumerMap.put(clientUpdate.client, clientUpdate.queue);
         propagateCurrentBook(clientUpdate.queue);
-        System.out.printf("ADDED CLIENT %s SYMBOL PROCESSING %s \n", clientUpdate.client.getUrl(), symbol);
+        System.out.printf("ADDED CLIENT %s AT SYMBOL PROCESSING %s \n", clientUpdate.client.getUrl(), symbol);
     }
 
     void propagateCurrentBook(MessagesToClientQueue queue) {
