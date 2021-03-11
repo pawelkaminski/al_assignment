@@ -13,7 +13,7 @@ public class QuoteServerSubscriber {
     private static final String MD_HOST = System.getenv().getOrDefault("MD_HOST", "localhost");
     private static final int QS_PORT = Integer.parseInt(System.getenv().getOrDefault("QS_PORT", "5000"));
     private static final String QS_HOST = System.getenv().getOrDefault("QS_HOST", "localhost");
-    private static final String[] SYMBOLS = System.getenv().getOrDefault("SYMBOLS", "ETH-BTC").split(",");
+    private static final String[] SYMBOLS = System.getenv().getOrDefault("SYMBOLS", "ETH-USD,ETH-BTC").split(",");
 
     private final SubscriberGrpc.SubscriberBlockingStub blockingStub;
 
@@ -53,7 +53,7 @@ public class QuoteServerSubscriber {
             System.out.println("Not subscribed.");
             return;
         }
-        System.out.println("Subscribed");
+        System.out.println("Subscribed to" + Arrays.toString(SYMBOLS));
     }
 
 }

@@ -1,22 +1,21 @@
 package al.assignment.websocketsubscriber;
 
+import al.assignment.utils.WebSocketQueue;
+import org.java_websocket.client.WebSocketClient;
+import org.java_websocket.drafts.Draft;
+import org.java_websocket.handshake.ServerHandshake;
+import org.json.simple.JSONObject;
+
 import java.io.IOException;
 import java.io.StringWriter;
 import java.net.URI;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 
-import org.java_websocket.client.WebSocketClient;
-import org.java_websocket.drafts.Draft;
-import org.java_websocket.handshake.ServerHandshake;
-import org.json.simple.JSONObject;
-
-import al.assignment.utils.WebSocketQueue;
-
 
 public class WebsocketSubscriber extends WebSocketClient {
-    static final String COINBASE_URL = "wss://ws-feed.pro.coinbase.com/";
-    String symbol;
+    private static final String COINBASE_URL = "wss://ws-feed.pro.coinbase.com/";
+    private final String symbol;
     private final WebSocketQueue queue;
 
     public WebsocketSubscriber(String symbol, WebSocketQueue queue, Draft draft) {
@@ -48,12 +47,12 @@ public class WebsocketSubscriber extends WebSocketClient {
     @Override
     public void onOpen(ServerHandshake handshakedata) {
         send(createOnSendMessage());
-        System.out.println("new connection opened");
+        System.out.printf("New websocket connection to symbol %s opened\n", symbol);
     }
 
     @Override
     public void onClose(int code, String reason, boolean remote) {
-        System.out.println("closed with exit code " + code + " additional info: " + reason);
+        System.out.printf("Closed websocket connection to symbol %s opened %s\n", symbol, reason);
     }
 
     @Override

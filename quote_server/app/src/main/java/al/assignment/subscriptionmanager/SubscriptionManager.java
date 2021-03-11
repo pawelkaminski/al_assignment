@@ -1,20 +1,21 @@
 package al.assignment.subscriptionmanager;
 
-import al.assignment.symbolprocessor.SymbolProcessor;
-import al.assignment.utils.*;
-import al.assignment.websocketsubscriber.WebsocketSubscriber;
-import org.java_websocket.client.WebSocketClient;
+import al.assignment.utils.ClientAddress;
+import al.assignment.utils.MessagesToClientQueue;
+import al.assignment.utils.SubscriptionUpdate;
+import al.assignment.utils.SubscriptionUpdatesQueue;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 
 public class SubscriptionManager {
-    private final HashMap<ClientAddress, ClientProcessingData> clientProcessingMap;
-    private final HashMap<String, SymbolProcessingData> symbolProcessingMap;
+    private final HashMap<ClientAddress, ClientProcessingManager> clientProcessingMap;
+    private final HashMap<String, SymbolProcessingManager> symbolProcessingMap;
     private final SubscriptionUpdatesQueue queue;
 
-    public SubscriptionManager(SubscriptionUpdatesQueue queue) {
-        this.queue = queue;
+    public SubscriptionManager() {
+        this.queue = SubscriptionUpdatesQueue.getInstance();
         this.symbolProcessingMap = new HashMap<>();
         this.clientProcessingMap = new HashMap<>();
     }
@@ -22,9 +23,7 @@ public class SubscriptionManager {
     public void run() {
         try {
             while (true) {
-                System.out.println("WAITING FOR MESSAGE!!!!");
                 consume(queue.take());
-                System.out.println("MESSAGE PROCESSED!!!!");
             }
         } catch (InterruptedException ex) {
             ex.printStackTrace();
@@ -32,76 +31,87 @@ public class SubscriptionManager {
     }
 
     private void consume(SubscriptionUpdate update) throws InterruptedException {
-        System.out.println("TAKEN KILL MESSAGE!!!!");
         if (update.isUnsubscribe || update.symbols.isEmpty()) {
-            removeAllSubscriptions(update.clientAddress);
+            removeAllClientSubscriptions(update.clientAddress);
             return;
         }
         updateSubscriptions(update.clientAddress, update.symbols);
     }
 
-    void removeAllSubscriptions(ClientAddress address) throws InterruptedException {
+    void removeAllClientSubscriptions(ClientAddress address) throws InterruptedException {
         if (!clientProcessingMap.containsKey(address)) {
             return;
         }
 
         for (String symbol: clientProcessingMap.get(address).getSymbols()) {
-            symbolProcessingMap.get(symbol).processor.removeClient(address);
-            symbolProcessingMap.get(symbol).clients.remove(address);
-            if (symbolProcessingMap.get(symbol).clients.isEmpty()) {
-                symbolProcessingMap.get(symbol).deleteProcessor();
-                symbolProcessingMap.remove(symbol);
-                System.out.printf("CLOSED SYMBOL PROCESSOR %s \n", symbol);
-            }
+            closeSymbolPipe(symbol, address);
         }
 
-        ClientProcessingData data = clientProcessingMap.get(address);
-        data.getSender().terminate();
-        data.getSender().interrupt();
-        data.getSender().join();
+        removeClient(address);
+    }
+
+    void closeSymbolPipe(String symbol, ClientAddress address) throws InterruptedException {
+        SymbolProcessingManager manager = symbolProcessingMap.get(symbol);
+        manager.removeClient(address);
+        System.out.printf("CLOSED SYMBOL %s TO ADDRESS %s PIPE \n", symbol, address.getUrl());
+        if (!manager.isUsed()) {
+            manager.close();
+            symbolProcessingMap.remove(symbol);
+            System.out.printf("CLOSED SYMBOL %s MANAGER \n", symbol);
+        }
+    }
+
+    void removeClient(ClientAddress address) throws InterruptedException {
+        clientProcessingMap.get(address).close();
         clientProcessingMap.remove(address);
+        System.out.printf("REMOVED CLIENT %s MANAGER\n", address.getUrl());
     }
 
     void updateSubscriptions(ClientAddress address, List<String> symbols) throws InterruptedException {
-
-        if (!clientProcessingMap.containsKey(address)) {
-            ClientProcessingData processingData = new ClientProcessingData();
-            processingData.createClientProcessingData(address);
-            clientProcessingMap.put(address, processingData);
-        }
-
-        MessagesToClientQueue queue = clientProcessingMap.get(address).getQueue();
+        addClient(address);
 
         for (String symbol: symbols) {
-            if (!symbolProcessingMap.containsKey(symbol)) {
-                WebSocketQueue websocketQueue = new WebSocketQueue();
-                SymbolProcessor processor = new SymbolProcessor(symbol, websocketQueue);
-                processor.start();
-                System.out.printf("CREATED PROCESSOR %s %s \n", address.getUrl(), symbol);
-                WebSocketClient client = new WebsocketSubscriber(symbol, websocketQueue);
-                client.connect();
-                System.out.printf("CREATED WEBSOCKET %s %s \n", address.getUrl(), symbol);
-                symbolProcessingMap.put(symbol, new SymbolProcessingData(processor, client));
-            }
-            symbolProcessingMap.get(symbol).processor.addClient(address, queue);
-            symbolProcessingMap.get(symbol).clients.add(address);
-            clientProcessingMap.get(address).addSymbol(symbol);
-            System.out.printf("PREPARE SENDING DATA TO %s ABOUT %s \n", address.getUrl(), symbol);
+            createSymbolProcessor(symbol);
+            createSymbolPipe(symbol, address);
         }
 
+        List<String> symbolsToRemove = new LinkedList<>();
         for (String symbol: clientProcessingMap.get(address).getSymbols()) {
-            if (symbols.contains(symbol)){
-                continue;
+            if (!symbols.contains(symbol)){
+                closeSymbolPipe(symbol, address);
+                symbolsToRemove.add(symbol);
             }
-            symbolProcessingMap.get(symbol).processor.removeClient(address);
-            symbolProcessingMap.get(symbol).clients.remove(address);
-            if (symbolProcessingMap.get(symbol).clients.isEmpty()) {
-                symbolProcessingMap.get(symbol).deleteProcessor();
-                symbolProcessingMap.remove(symbol);
-                System.out.printf("CLOSED SYMBOL PROCESSOR %s \n", symbol);
-            }
+        }
+
+        for (String symbol: symbolsToRemove) {
+            clientProcessingMap.get(address).removeSymbol(symbol);
         }
     }
 
+    void addClient(ClientAddress address) {
+        if (clientProcessingMap.containsKey(address)) {
+            return;
+        }
+        ClientProcessingManager processingData = new ClientProcessingManager();
+        processingData.createClientProcessing(address);
+        clientProcessingMap.put(address, processingData);
+        System.out.printf("CLIENT PROCESSOR %s ADDED\n", address.getUrl());
+    }
 
+    void createSymbolProcessor(String symbol) {
+        if (symbolProcessingMap.containsKey(symbol)) {
+            return;
+        }
+        SymbolProcessingManager manager = new SymbolProcessingManager();
+        manager.createClientProcessing(symbol);
+        symbolProcessingMap.put(symbol, manager);
+        System.out.printf("CREATED SYMBOL %s PROCESSOR\n", symbol);
+    }
+
+    void createSymbolPipe(String symbol, ClientAddress address) {
+        MessagesToClientQueue queue = clientProcessingMap.get(address).getQueue();
+        symbolProcessingMap.get(symbol).addClient(address, queue);
+        clientProcessingMap.get(address).addSymbol(symbol);
+        System.out.printf("CREATED SYMBOL %s TO ADDRESS %s PIPE \n", symbol, address.getUrl());
+    }
 }

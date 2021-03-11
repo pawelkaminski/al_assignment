@@ -10,11 +10,9 @@ public class SubscriptionUpdatesQueue extends ArrayBlockingQueue<SubscriptionUpd
 
         SubscriptionUpdatesQueue result = instance;
         if (result != null) {
-            System.out.println("USED OLD QUEUE!");
             return result;
         }
         synchronized(SubscriptionUpdatesQueue.class) {
-            System.out.println("QUEUE CREATED!");
             if (instance == null) {
                 instance = new SubscriptionUpdatesQueue();
             }

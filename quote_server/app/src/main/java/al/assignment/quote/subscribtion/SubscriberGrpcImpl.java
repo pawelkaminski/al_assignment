@@ -20,7 +20,7 @@ public class SubscriberGrpcImpl extends SubscriberGrpc.SubscriberImplBase {
     public void subscribe(Subscriptions request, StreamObserver<ProducerStatus> responseObserver) {
         responseObserver.onNext(updateSubscription(request));
         responseObserver.onCompleted();
-        System.out.println("COLLECTED SUBSCRIPTION" + request.getSubscriptionList().toString());
+        System.out.printf("COLLECTED SUBSCRIPTION %s\n", request.getSubscriptionList().toString());
     }
 
     ProducerStatus updateSubscription(Subscriptions request) {

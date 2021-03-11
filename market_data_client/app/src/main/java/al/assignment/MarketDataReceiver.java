@@ -14,16 +14,16 @@ public class MarketDataReceiver {
 
     public void start() throws IOException {
         server = ServerBuilder.forPort(MD_PORT).addService(new ConsumerGrpcImpl()).build().start();
-        System.out.println("Server started, listening on " + MD_PORT);
+        System.out.printf("Server started, listening on %d\n", MD_PORT);
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             // Use stderr here since the logger may have been reset by its JVM shutdown hook.
-            System.err.println("*** shutting down gRPC server since JVM is shutting down");
+            System.err.println("Shutting down gRPC server since JVM is shutting down");
             try {
                 MarketDataReceiver.this.stop();
             } catch (InterruptedException e) {
                 e.printStackTrace(System.err);
             }
-            System.err.println("*** server shut down");
+            System.err.println("RPC server shut down");
         }));
     }
 

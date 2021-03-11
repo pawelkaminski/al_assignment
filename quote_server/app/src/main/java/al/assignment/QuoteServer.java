@@ -2,23 +2,23 @@ package al.assignment;
 
 import al.assignment.quote.subscribtion.QuoteSubscriptionServer;
 import al.assignment.subscriptionmanager.SubscriptionManager;
-import al.assignment.utils.SubscriptionUpdatesQueue;
 
 import java.io.IOException;
 
 public class QuoteServer {
-    private static SubscriptionUpdatesQueue queue;
 
     public static void main(String[] args) throws IOException {
         startRPCServer();
-        SubscriptionManager manager = new SubscriptionManager(queue);
-        manager.run();
+        runSubscriptionManager();
     }
 
     private static void startRPCServer() throws IOException {
         QuoteSubscriptionServer RPCServer = new QuoteSubscriptionServer();
-        queue = SubscriptionUpdatesQueue.getInstance();
-        System.out.println();
-        RPCServer.start(queue);
+        RPCServer.start();
+    }
+
+    private static void runSubscriptionManager() {
+        SubscriptionManager manager = new SubscriptionManager();
+        manager.run();
     }
 }
