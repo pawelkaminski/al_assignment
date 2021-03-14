@@ -19,20 +19,20 @@ public class Order {
         if (quantity.equals("0")) {
             isDelete = true;
         }
-        Book.Builder builder = Book.newBuilder();
-        builder.setIsBuy(this.isBuy);
-        builder.setIsDelete(isDelete);
-        builder.setSymbol(symbol);
-        builder.setPrice(price);
-        builder.setQuantity(quantity);
-        builder.setOrderId(orderId);
-        return builder.build();
+        return Book.newBuilder()
+            .setIsBuy(this.isBuy)
+            .setIsDelete(isDelete)
+            .setSymbol(symbol)
+            .setPrice(price)
+            .setQuantity(quantity)
+            .setOrderId(orderId)
+            .build();
     }
 
-    public boolean decreaseQuantity(String other) {
+    public void decreaseQuantity(String other) {
         if (quantity.equals(other)) {
             this.quantity = "0";
-            return true;
+            return;
         }
 
         var otherArr = other.split("\\.");
@@ -45,28 +45,28 @@ public class Order {
             } else {
                 makeQuantity(first, Long.parseLong(thisArr[1]));
             }
-            return false;
+            return;
         }
 
         long second;
         if (thisArr.length == 1) {
             first -= 1L;
-            second = getMul(1L, otherArr[1].length());
+            second = getPow10(1L, otherArr[1].length());
             second -= Long.parseLong(otherArr[1]);
             makeQuantity(first, second, otherArr[1].length());
-            return false;
+            return;
         }
 
-        int diff = otherArr[1].length() - thisArr[1].length();
-        int max = Math.max(otherArr[1].length(),thisArr[1].length());
-        second = getMul(Long.parseLong(thisArr[1]), diff) - getMul(Long.parseLong(otherArr[1]), diff);
+        int diffPrecision = otherArr[1].length() - thisArr[1].length();
+        int expectedPrecision = Math.max(otherArr[1].length(),thisArr[1].length());
+        second = getPow10(Long.parseLong(thisArr[1]), diffPrecision)
+                - getPow10(Long.parseLong(otherArr[1]), diffPrecision);
         if (second < 0) {
             first -= 1L;
-            second += getMul(1L, max);
+            second += getPow10(1L, expectedPrecision);
         }
-        makeQuantity(first, second, max);
+        makeQuantity(first, second, expectedPrecision);
 
-        return false;
     }
 
     private void makeQuantity(long first, long second) {
@@ -77,16 +77,16 @@ public class Order {
         }
     }
 
-    private void makeQuantity(long first, long second, int size) {
+    private void makeQuantity(long first, long second, int precision) {
         if (second == 0L){
             this.quantity = first + "";
             return;
         }
 
-        char[] chars = new char[size];
+        char[] chars = new char[precision];
         Arrays.fill(chars, '0');
 
-        int idx = size - 1;
+        int idx = precision - 1;
         while(second > 0L) {
             chars[idx] = (char) (48L + second % 10L);
             idx --;
@@ -97,7 +97,7 @@ public class Order {
         this.quantity = first + "." + string;
     }
 
-    private long getMul(long result, int size) {
+    private long getPow10(long result, int size) {
         for (int idx = 0; idx < size; ++idx) {
             result *= 10L;
         }

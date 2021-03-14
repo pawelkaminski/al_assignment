@@ -11,11 +11,6 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import javax.net.ssl.HttpsURLConnection;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -65,40 +60,8 @@ public class SymbolProcessor extends Thread {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        String response = getWebResponse();
+        String response = WebCurrentBook.getCurrentWeb(symbol);
         storeWebResponse(response);
-    }
-
-    private String getWebResponse() {
-        // TODO(pawelk): ugly uri creator
-        String uri = "https://api.pro.coinbase.com/products/" + symbol + "/book?level=3";
-
-        HttpsURLConnection con = null;
-        try {
-            URL url = new URL(uri);
-            con = (HttpsURLConnection) url.openConnection();
-            con.setRequestMethod("GET");
-            BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream()));
-            StringBuilder sb = new StringBuilder();
-            String line;
-            while ((line = br.readLine()) != null) {
-                sb.append(line).append("\n");
-            }
-            br.close();
-            return sb.toString();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }finally {
-            if (con != null) {
-                try {
-                    con.disconnect();
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-            }
-        }
-        // TODO(pawelk): process exception
-        return "";
     }
 
     private void storeWebResponse(String response) {
@@ -137,78 +100,6 @@ public class SymbolProcessor extends Thread {
         }
     }
 
-    private void consume(String message) {
-        JSONObject cleanedMessage;
-        try {
-            cleanedMessage = (JSONObject) parser.parse(message);
-        } catch (ParseException exception) {
-            exception.printStackTrace();
-            return;
-        }
-
-        if (!cleanedMessage.containsKey("type")) {
-            return;
-        }
-
-        if ((Long) cleanedMessage.get("sequence") <= firstSequenceID) {
-            return;
-        }
-
-        if (cleanedMessage.get("type").equals("open")) {
-            Order order = new Order(
-                    (cleanedMessage.get("side")).equals("buy"),
-                    (String) cleanedMessage.get("price"),
-                    (String) cleanedMessage.get("remaining_size")
-            );
-            String orderId = (String) cleanedMessage.get("order_id");
-            book.put(orderId, order);
-            propagateMessages(new MessageToClient(order.getBookProto(symbol,orderId, false)));
-            return;
-        }
-
-        if (cleanedMessage.get("type").equals("done")) {
-            String orderId = (String) cleanedMessage.get("order_id");
-            Order order = book.remove(orderId);
-
-            if (order == null) {
-                return;
-            }
-
-            propagateMessages(new MessageToClient(order.getBookProto(symbol, orderId, true)));
-            return;
-        }
-
-        if (cleanedMessage.get("type").equals("match")) {
-            propagateMessages(prepareTradeMessage(cleanedMessage));
-            String size = (String) cleanedMessage.get("size");
-
-            for (String key: new String[]{"maker_order_id","taker_order_id"}) {
-                String orderId = (String) cleanedMessage.get(key);
-                if (!book.containsKey(orderId)) {
-                    continue;
-                }
-                Order order = book.get(orderId);
-                order.decreaseQuantity(size);
-                propagateMessages(new MessageToClient(order.getBookProto(symbol, orderId, false)));
-            }
-        }
-    }
-
-    private void propagateMessages(MessageToClient message) {
-        for (var queue: consumerMap.values()) {
-            queue.add(message);
-        }
-    }
-
-    private MessageToClient prepareTradeMessage(JSONObject cleanedMessage) {
-        Trade.Builder builder = Trade.newBuilder();
-        builder.setSymbol(symbol);
-        builder.setIsBuy(cleanedMessage.get("side").equals("buy"));
-        builder.setPrice((String) cleanedMessage.get("price"));
-        builder.setQuantity((String) cleanedMessage.get("size"));
-        return new MessageToClient(builder.build());
-    }
-
     private void update() throws InterruptedException {
         while (!clientUpdates.isEmpty()) {
             ClientUpdateData clientUpdate = clientUpdates.take();
@@ -238,6 +129,86 @@ public class SymbolProcessor extends Thread {
         for (Book bookMessage: book.prepareBookMessages(symbol)) {
             queue.add(new MessageToClient(bookMessage));
         }
+    }
+
+    private void consume(String message) {
+        JSONObject cleanedMessage;
+        try {
+            cleanedMessage = (JSONObject) parser.parse(message);
+        } catch (ParseException exception) {
+            exception.printStackTrace();
+            return;
+        }
+
+        if (!cleanedMessage.containsKey("type") || (Long) cleanedMessage.get("sequence") <= firstSequenceID) {
+            return;
+        }
+
+        switch ((String) cleanedMessage.get("type")) {
+            case "open":
+                processOpen(cleanedMessage);
+                return;
+            case "done":
+                processDone(cleanedMessage);
+                return;
+            case "match":
+                processMatch(cleanedMessage);
+        }
+
+    }
+
+    private void processOpen(JSONObject cleanedMessage) {
+        Order order = new Order(
+                (cleanedMessage.get("side")).equals("buy"),
+                (String) cleanedMessage.get("price"),
+                (String) cleanedMessage.get("remaining_size")
+        );
+        String orderId = (String) cleanedMessage.get("order_id");
+        book.put(orderId, order);
+        propagateMessages(new MessageToClient(order.getBookProto(symbol,orderId, false)));
+    }
+
+
+    private void processDone(JSONObject cleanedMessage) {
+        String orderId = (String) cleanedMessage.get("order_id");
+        Order order = book.remove(orderId);
+
+        if (order == null) {
+            return;
+        }
+
+        propagateMessages(new MessageToClient(order.getBookProto(symbol, orderId, true)));
+    }
+
+    private void processMatch(JSONObject cleanedMessage) {
+        propagateMessages(prepareTradeMessage(cleanedMessage));
+        String size = (String) cleanedMessage.get("size");
+
+        for (String key: new String[]{"maker_order_id","taker_order_id"}) {
+            String orderId = (String) cleanedMessage.get(key);
+            if (!book.containsKey(orderId)) {
+                continue;
+            }
+            Order order = book.get(orderId);
+            order.decreaseQuantity(size);
+            propagateMessages(new MessageToClient(order.getBookProto(symbol, orderId, false)));
+        }
+    }
+
+    private void propagateMessages(MessageToClient message) {
+        for (var queue: consumerMap.values()) {
+            queue.add(message);
+        }
+    }
+
+    private MessageToClient prepareTradeMessage(JSONObject cleanedMessage) {
+        Trade.Builder builder = Trade.newBuilder()
+            .setSymbol(symbol)
+            .setIsBuy(cleanedMessage.get("side")
+            .equals("buy"))
+            .setPrice((String) cleanedMessage.get("price"))
+            .setQuantity((String) cleanedMessage.get("size"));
+        return new MessageToClient(builder.build());
     }
 
 }
