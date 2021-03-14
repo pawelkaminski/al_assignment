@@ -1,6 +1,5 @@
 package al.assignment.quote.subscribtion;
 
-import al.assignment.utils.SubscriptionUpdatesQueue;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
 
@@ -13,13 +12,12 @@ public class QuoteSubscriptionServer {
     private Server server;
 
     public void start() throws IOException {
-        SubscriptionUpdatesQueue queue = SubscriptionUpdatesQueue.getInstance();
-        server = ServerBuilder.forPort(QS_PORT).addService(new SubscriberGrpcImpl(queue)).build().start();
+        server = ServerBuilder.forPort(QS_PORT).addService(new SubscriberGrpcImpl()).build().start();
         System.out.printf("Quote Subscription RPC Server started, listening on %d\n", QS_PORT);
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             System.err.println("shutting down gRPC server since JVM is shutting down");
             try {
-                QuoteSubscriptionServer.this.stop();
+                stop();
             } catch (InterruptedException e) {
                 e.printStackTrace(System.err);
             }

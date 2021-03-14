@@ -5,7 +5,7 @@ import al.assignment.consumer.grpc.Trade;
 import al.assignment.utils.ClientAddress;
 import al.assignment.utils.MessageToClient;
 import al.assignment.utils.MessagesToClientQueue;
-import al.assignment.utils.WebSocketQueue;
+import al.assignment.utils.WebSocketMessagesQueue;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -22,7 +22,7 @@ import java.util.concurrent.ArrayBlockingQueue;
 
 
 public class SymbolProcessor extends Thread {
-    private final WebSocketQueue queue;
+    private final WebSocketMessagesQueue queue;
     private final String symbol;
     private Long firstSequenceID;
     private final JSONParser parser;
@@ -31,7 +31,7 @@ public class SymbolProcessor extends Thread {
     private final Map<ClientAddress, MessagesToClientQueue> consumerMap;
     private final ArrayBlockingQueue<ClientUpdateData> clientUpdates;
 
-    public SymbolProcessor(String symbol, WebSocketQueue queue) {
+    public SymbolProcessor(String symbol, WebSocketMessagesQueue queue) {
         this.queue = queue;
         this.symbol = symbol;
         this.parser = new JSONParser();
@@ -59,7 +59,7 @@ public class SymbolProcessor extends Thread {
     }
 
     private void prepareInitialBook() {
-        // We want to ensure that first message is taken from websocket (first message is asubscribe message)
+        // We want to ensure that first message is taken from websocket (first message is a subscribe message)
         try {
             queue.take();
         } catch (InterruptedException e) {
@@ -234,7 +234,7 @@ public class SymbolProcessor extends Thread {
         System.out.printf("ADDED CLIENT %s AT SYMBOL PROCESSING %s \n", clientUpdate.client.getUrl(), symbol);
     }
 
-    void propagateCurrentBook(MessagesToClientQueue queue) {
+    private void propagateCurrentBook(MessagesToClientQueue queue) {
         for (Book bookMessage: book.prepareBookMessages(symbol)) {
             queue.add(new MessageToClient(bookMessage));
         }

@@ -1,7 +1,6 @@
-package al.assignment.subscriptionmanager;
+package al.assignment.manager;
 
 import al.assignment.utils.ClientAddress;
-import al.assignment.utils.MessagesToClientQueue;
 import al.assignment.utils.SubscriptionUpdate;
 import al.assignment.utils.SubscriptionUpdatesQueue;
 
@@ -20,7 +19,7 @@ public class SubscriptionManager {
         this.clientProcessingMap = new HashMap<>();
     }
 
-    public void run() {
+    public void blockingRun() {
         try {
             while (true) {
                 consume(queue.take());
@@ -38,7 +37,7 @@ public class SubscriptionManager {
         updateSubscriptions(update.clientAddress, update.symbols);
     }
 
-    void removeAllClientSubscriptions(ClientAddress address) throws InterruptedException {
+    private void removeAllClientSubscriptions(ClientAddress address) throws InterruptedException {
         if (!clientProcessingMap.containsKey(address)) {
             return;
         }
@@ -50,7 +49,7 @@ public class SubscriptionManager {
         removeClient(address);
     }
 
-    void closeSymbolPipe(String symbol, ClientAddress address) throws InterruptedException {
+    private void closeSymbolPipe(String symbol, ClientAddress address) throws InterruptedException {
         SymbolProcessingManager manager = symbolProcessingMap.get(symbol);
         manager.removeClient(address);
         System.out.printf("CLOSED SYMBOL %s TO ADDRESS %s PIPE \n", symbol, address.getUrl());
@@ -61,13 +60,13 @@ public class SubscriptionManager {
         }
     }
 
-    void removeClient(ClientAddress address) throws InterruptedException {
+    private void removeClient(ClientAddress address) throws InterruptedException {
         clientProcessingMap.get(address).close();
         clientProcessingMap.remove(address);
         System.out.printf("REMOVED CLIENT %s MANAGER\n", address.getUrl());
     }
 
-    void updateSubscriptions(ClientAddress address, List<String> symbols) throws InterruptedException {
+    private void updateSubscriptions(ClientAddress address, List<String> symbols) throws InterruptedException {
         addClient(address);
 
         for (String symbol: symbols) {
@@ -88,7 +87,7 @@ public class SubscriptionManager {
         }
     }
 
-    void addClient(ClientAddress address) {
+    private void addClient(ClientAddress address) {
         if (clientProcessingMap.containsKey(address)) {
             return;
         }
@@ -98,7 +97,7 @@ public class SubscriptionManager {
         System.out.printf("CLIENT PROCESSOR %s ADDED\n", address.getUrl());
     }
 
-    void createSymbolProcessor(String symbol) {
+    private void createSymbolProcessor(String symbol) {
         if (symbolProcessingMap.containsKey(symbol)) {
             return;
         }
@@ -108,10 +107,10 @@ public class SubscriptionManager {
         System.out.printf("CREATED SYMBOL %s PROCESSOR\n", symbol);
     }
 
-    void createSymbolPipe(String symbol, ClientAddress address) {
-        MessagesToClientQueue queue = clientProcessingMap.get(address).getQueue();
-        symbolProcessingMap.get(symbol).addClient(address, queue);
-        clientProcessingMap.get(address).addSymbol(symbol);
+    private void createSymbolPipe(String symbol, ClientAddress address) {
+        ClientProcessingManager clientManager = clientProcessingMap.get(address);
+        symbolProcessingMap.get(symbol).addClient(address, clientManager.getQueue());
+        clientManager.addSymbol(symbol);
         System.out.printf("CREATED SYMBOL %s TO ADDRESS %s PIPE \n", symbol, address.getUrl());
     }
 }

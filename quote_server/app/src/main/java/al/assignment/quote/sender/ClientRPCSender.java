@@ -31,19 +31,11 @@ public class ClientRPCSender extends Thread {
         terminateChannel();
     }
 
-    private void prepareConnection(){
-        System.out.println("CLIENT RPC SENDER PREPARATION");
+    private void prepareConnection() {
         String target = address.getUrl();
         channel = ManagedChannelBuilder.forTarget(target).usePlaintext().build();
         blockingStub = ConsumerGrpc.newBlockingStub(channel);
 
-    }
-    void terminateChannel() {
-        try {
-            channel.shutdownNow().awaitTermination(5, TimeUnit.SECONDS);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
     }
 
     private void processMessages() {
@@ -72,5 +64,11 @@ public class ClientRPCSender extends Thread {
         terminate();
     }
 
-
+    private void terminateChannel() {
+        try {
+            channel.shutdownNow().awaitTermination(5, TimeUnit.SECONDS);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
 }

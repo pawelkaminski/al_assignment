@@ -2,9 +2,9 @@ package al.assignment.utils;
 
 import java.util.concurrent.ArrayBlockingQueue;
 
-public class WebSocketQueue extends ArrayBlockingQueue<String> {
+public class WebSocketMessagesQueue extends ArrayBlockingQueue<String> {
 
-    public WebSocketQueue() {
+    public WebSocketMessagesQueue() {
         super(100000);
     }
 }

@@ -1,8 +1,7 @@
-package al.assignment.websocketsubscriber;
+package al.assignment.websocket;
 
-import al.assignment.utils.WebSocketQueue;
+import al.assignment.utils.WebSocketMessagesQueue;
 import org.java_websocket.client.WebSocketClient;
-import org.java_websocket.drafts.Draft;
 import org.java_websocket.handshake.ServerHandshake;
 import org.json.simple.JSONObject;
 
@@ -10,31 +9,31 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.net.URI;
 import java.nio.ByteBuffer;
-import java.util.Arrays;
+import java.util.Collections;
 
 
 public class WebsocketSubscriber extends WebSocketClient {
     private static final String COINBASE_URL = "wss://ws-feed.pro.coinbase.com/";
     private final String symbol;
-    private final WebSocketQueue queue;
+    private final WebSocketMessagesQueue queue;
 
-    public WebsocketSubscriber(String symbol, WebSocketQueue queue, Draft draft) {
-        super(URI.create(WebsocketSubscriber.COINBASE_URL), draft);
-        this.symbol = symbol;
-        this.queue = queue;
-    }
-
-    public WebsocketSubscriber(String symbol, WebSocketQueue queue) {
+    public WebsocketSubscriber(String symbol, WebSocketMessagesQueue queue) {
         super(URI.create(WebsocketSubscriber.COINBASE_URL));
         this.symbol = symbol;
         this.queue = queue;
     }
 
-    public String createOnSendMessage() {
-        JSONObject obj=new JSONObject();
+    @Override
+    public void onOpen(ServerHandshake handshakedata) {
+        send(createOnSendMessage());
+        System.out.printf("New websocket connection to symbol %s opened\n", symbol);
+    }
+
+    private String createOnSendMessage() {
+        JSONObject obj = new JSONObject();
         obj.put("type","subscribe");
-        obj.put("product_ids",Arrays.asList(this.symbol));
-        obj.put("channels",Arrays.asList("full"));
+        obj.put("product_ids", Collections.singletonList(this.symbol));
+        obj.put("channels", Collections.singletonList("full"));
         StringWriter out = new StringWriter();
         try {
             obj.writeJSONString(out);
@@ -42,12 +41,6 @@ public class WebsocketSubscriber extends WebSocketClient {
             e.printStackTrace();
         }
         return out.toString();
-    }
-
-    @Override
-    public void onOpen(ServerHandshake handshakedata) {
-        send(createOnSendMessage());
-        System.out.printf("New websocket connection to symbol %s opened\n", symbol);
     }
 
     @Override

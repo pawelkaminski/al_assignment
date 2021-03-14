@@ -1,4 +1,4 @@
-package al.assignment.subscriptionmanager;
+package al.assignment.manager;
 
 import al.assignment.quote.sender.ClientRPCSender;
 import al.assignment.utils.ClientAddress;
@@ -10,7 +10,7 @@ import java.util.Set;
 public class ClientProcessingManager {
     private ClientRPCSender sender;
     private MessagesToClientQueue queue;
-    private final Set<String> symbols;
+    private final HashSet<String> symbols;
 
     public ClientProcessingManager() {
         this.symbols = new HashSet<>();
@@ -23,7 +23,7 @@ public class ClientProcessingManager {
     }
 
     public Set<String> getSymbols() {
-        return symbols;
+        return new HashSet<>(symbols);
     }
 
     public void addSymbol(String symbol) {

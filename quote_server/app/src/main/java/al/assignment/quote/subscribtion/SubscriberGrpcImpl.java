@@ -11,16 +11,17 @@ import io.grpc.stub.StreamObserver;
 public class SubscriberGrpcImpl extends SubscriberGrpc.SubscriberImplBase {
     private final SubscriptionUpdatesQueue queue;
 
-    SubscriberGrpcImpl(SubscriptionUpdatesQueue queue) {
+    SubscriberGrpcImpl() {
         super();
-        this.queue = queue;
+        this.queue = SubscriptionUpdatesQueue.getInstance();
     }
 
     @Override
     public void subscribe(Subscriptions request, StreamObserver<ProducerStatus> responseObserver) {
+        System.out.printf("RECEIVED SUBSCRIPTION REQUEST FROM %s:%s WITH SYMBOLS %s \n",
+                request.getHost(), request.getPort(), request.getSubscriptionList().toString());
         responseObserver.onNext(updateSubscription(request));
         responseObserver.onCompleted();
-        System.out.printf("COLLECTED SUBSCRIPTION %s\n", request.getSubscriptionList().toString());
     }
 
     ProducerStatus updateSubscription(Subscriptions request) {

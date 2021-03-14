@@ -1,10 +1,10 @@
-package al.assignment.subscriptionmanager;
+package al.assignment.manager;
 
 import al.assignment.symbolprocessor.SymbolProcessor;
 import al.assignment.utils.ClientAddress;
 import al.assignment.utils.MessagesToClientQueue;
-import al.assignment.utils.WebSocketQueue;
-import al.assignment.websocketsubscriber.WebsocketSubscriber;
+import al.assignment.utils.WebSocketMessagesQueue;
+import al.assignment.websocket.WebsocketSubscriber;
 import org.java_websocket.client.WebSocketClient;
 
 import java.util.HashSet;
@@ -20,7 +20,7 @@ public class SymbolProcessingManager {
     }
 
     public void createClientProcessing(String symbol) {
-        WebSocketQueue websocketQueue = new WebSocketQueue();
+        WebSocketMessagesQueue websocketQueue = new WebSocketMessagesQueue();
         processor = new SymbolProcessor(symbol, websocketQueue);
         processor.start();
         subscriber = new WebsocketSubscriber(symbol, websocketQueue);
